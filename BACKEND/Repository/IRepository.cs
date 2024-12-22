@@ -9,7 +9,7 @@ namespace Repository
     public interface IRepository<T> where T : class
     {
         IQueryable<T> ReadAll();
-        T Read(int id);
+        T Read(string id);
         void Create(T item);
         void Delete(T item);
         void Update(T item);

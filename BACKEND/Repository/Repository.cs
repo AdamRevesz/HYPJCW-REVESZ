@@ -29,7 +29,7 @@ namespace Repository
             ctx.SaveChanges();
         }
 
-        public abstract T Read(int id);
+        public abstract T Read(string id);
    
         public IQueryable<T> ReadAll()
         {
