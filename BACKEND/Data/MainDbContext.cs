@@ -18,6 +18,11 @@ namespace Data
         public DbSet<Content> Contents { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
+        public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
+        {
+
+        }
+
         public MainDbContext()
         {
             this.Database.EnsureCreated();
@@ -28,43 +33,40 @@ namespace Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(u => u.UserId);
+                entity.HasMany(u => u.Contents)
+                         .WithOne(c => c.Owner)
+                         .HasForeignKey(c => c.OwnerId)
+                         .OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(u => u.Comments)
-                .WithOne(c => c.User);
-            });
+                        .WithOne(c => c.Poster)
+                        .HasForeignKey(c => c.PosterId)
+                        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Video>(entity =>
-            {
-                entity.HasKey(v => v.ContentId);
             });
 
             modelBuilder.Entity<Content>(entity =>
             {
                 entity.HasKey(c => c.ContentId);
                 entity.HasMany(c => c.Comments)
-                .WithOne(c => c.Content);
+                         .WithOne(c => c.Contents)
+                         .HasForeignKey(c => c.ContentId)
+                         .OnDelete(DeleteBehavior.Cascade);
+
                 entity.HasOne(c => c.Owner)
-                .WithMany(c => c.Contents);
-            });
-
-            modelBuilder.Entity<Picture>(entity =>
-            {
-                entity.HasKey(p => p.ContentId);
-            });
-
-            modelBuilder.Entity<Course>(entity =>
-            {
-                entity.HasKey(c => c.ContentId);
+                         .WithMany(u => u.Contents)
+                         .HasForeignKey(c => c.OwnerId)
+                         .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(c => c.CommentId);
-            });
 
-            modelBuilder.Entity<SalesItem>(entity =>
-            {
-                entity.HasKey(c => c.ContentId);
             });
+            modelBuilder.Entity<Video>().HasBaseType<Content>();
+            modelBuilder.Entity<Picture>().HasBaseType<Content>();
+            modelBuilder.Entity<Course>().HasBaseType<Content>();
+            modelBuilder.Entity<SalesItem>().HasBaseType<Content>();
 
             base.OnModelCreating(modelBuilder);
         }

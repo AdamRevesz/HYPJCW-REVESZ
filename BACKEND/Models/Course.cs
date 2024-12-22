@@ -18,6 +18,6 @@ namespace Models
     public class Course : Content
     {
         public int Price { get; set; }
-        public Category Category { get; set; }
+        public Category CourseCategory { get; set; }
     }
 }
