@@ -22,6 +22,6 @@ namespace Models
         public bool IsAdult => (DateTime.Now - BirthDate.ToDateTime(TimeOnly.MinValue)).TotalDays / 365.25 >= 18;
         public DateOnly AccountCreated { get; set; }
         public virtual List<Content> Contents { get; set; }
-        public virtual List<Comment> Comments { get; set; }
+        public virtual List<Comments> Comments { get; set; }
     }
 }

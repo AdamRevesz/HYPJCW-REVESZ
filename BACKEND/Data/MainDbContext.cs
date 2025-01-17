@@ -10,13 +10,13 @@ namespace Data
 {
     public class MainDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Video> Videos { get; set; }
-        public DbSet<Picture> Pictures { get; set; }
-        public DbSet<SalesItem> SalesItems { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Content> Contents { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Video>? Videos { get; set; }
+        public DbSet<Picture>? Pictures { get; set; }
+        public DbSet<SalesItem>? SalesItems { get; set; }
+        public DbSet<Course>? Courses { get; set; }
+        public DbSet<Content>? Contents { get; set; }
+        public DbSet<Comments>? Comments { get; set; }
 
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
@@ -58,7 +58,7 @@ namespace Data
                          .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Comment>(entity =>
+            modelBuilder.Entity<Comments>(entity =>
             {
                 entity.HasKey(c => c.CommentId);
 

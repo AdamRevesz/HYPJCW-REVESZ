@@ -11,8 +11,8 @@ namespace Logic
 {
     public class CommentLogic : ICommentLogic
     {
-        IRepository<Comment> commentRepo;
-        public CommentLogic(IRepository<Comment> commentRepo)
+        IRepository<Comments> commentRepo;
+        public CommentLogic(IRepository<Comments> commentRepo)
         {
             this.commentRepo = commentRepo;
         }

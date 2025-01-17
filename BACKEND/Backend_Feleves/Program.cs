@@ -13,7 +13,7 @@ namespace Backend_Feleves
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddTransient<IRepository<User>, UserRepo>();
-            builder.Services.AddTransient<IRepository<Comment>, CommentRepo>();
+            builder.Services.AddTransient<IRepository<Comments>, CommentRepo>();
             builder.Services.AddTransient<IRepository<Content>, ContentRepo>();
             builder.Services.AddTransient<IRepository<Course>, CourseRepo>();
             builder.Services.AddTransient<IRepository<Picture>, PictureRepo>();
