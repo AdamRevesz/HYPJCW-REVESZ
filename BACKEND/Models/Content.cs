@@ -8,8 +8,19 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public abstract class Content
+    public class Content
     {
+        public Content(string? title, string? body, string? ownerId, User? owner, DateOnly createDate, int numberOfLikes, List<Comments>? comments, string? category)
+        {
+            ContentId = Guid.NewGuid().ToString();
+            Title = title;
+            Body = body;
+            OwnerId = ownerId;
+            Owner = owner;
+            CreateDate = createDate;
+            Category = category;
+        }
+
         [Key]
         public string? ContentId { get; set; }
         public string? Title { get; set; }
@@ -21,5 +32,6 @@ namespace Models
         public virtual List<Comments>? Comments { get; set; }
         [MaxLength(30)]
         public string? Category { get; set; }
+
     }
 }
