@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models;
 
 namespace Models.Dtos.Content
 {
     public class ContentShortViewDto
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
+        public string Id { get; set; } = "";
+        public string Title { get; set; } = "";
         public int Likes { get; set; }
-        public User Owner { get; set; }
-        public string Category { get; set; }
+        public Models.User Owner { get; set; } = new Models.User();
+        public string Category { get; set; } = "";
     }
 }

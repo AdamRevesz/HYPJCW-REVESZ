@@ -20,5 +20,10 @@ namespace Models
         public int Price { get; set; }
         public bool InStock { get; set; }
         public int Number { get; set; }
+
+        public SalesItem()
+        {
+
+        }
     }
 }

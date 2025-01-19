@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,30 +9,41 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Content
+    public abstract class Content : IIdEntity
     {
-        public Content(string? title, string? body, string? ownerId, User? owner, DateOnly createDate, int numberOfLikes, List<Comments>? comments, string? category)
+
+        [StringLength(50)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [StringLength(50)]
+        public string Title { get; set; } = "";
+        public string Body { get; set; } = "";
+        public string OwnerId { get; set; } = ""; // Foreign key to User
+        public virtual User Owner { get; set; } = new User();
+        public DateOnly CreateDate { get; set; }
+        public int NumberOfLikes { get; set; }
+        [NotMapped]
+        public virtual List<Comments> Comments { get; set; } = new List<Comments>();
+        [MaxLength(30)]
+        public string Category { get; set; } = "";
+
+
+        public Content(string contentId, string title, string body, string ownerId, User owner, DateOnly createDate, int numberOfLikes, List<Comments> comments, string category)
         {
-            ContentId = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString();
             Title = title;
             Body = body;
             OwnerId = ownerId;
             Owner = owner;
             CreateDate = createDate;
             Category = category;
+            Comments = new List<Comments>();
         }
+        public Content()
+        {
 
-        [Key]
-        public string? ContentId { get; set; }
-        public string? Title { get; set; }
-        public string? Body { get; set; }
-        public string? OwnerId { get; set; } // Foreign key to User
-        public virtual User? Owner { get; set; }
-        public DateOnly CreateDate { get; set; }
-        public int NumberOfLikes { get; set; }
-        public virtual List<Comments>? Comments { get; set; }
-        [MaxLength(30)]
-        public string? Category { get; set; }
-
+        }
+        
     }
 }

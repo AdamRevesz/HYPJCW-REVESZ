@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic.Helper
 {
-    public class DoProvider
+    public class DtoProvider
     {
 
     }

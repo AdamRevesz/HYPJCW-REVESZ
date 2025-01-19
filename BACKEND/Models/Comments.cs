@@ -13,13 +13,14 @@ namespace Models
     public class Comments : IIdEntity
     {
         [Key]
-        public string Id { get; set; }
-        public string PosterId { get; set; } // Foreign key to User
-        public virtual User Poster { get; set; }
-        public string Body { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; } = "";
+        public string PosterId { get; set; } = ""; // Foreign key to User
+        public virtual User? Poster { get; set; }
+        public string Body { get; set; } = "";
         public int Likes { get; set; }
-        public string ContentId { get; set; } // Foreign key to Content
-        public virtual Content Contents { get; set; }
+        public string ContentId { get; set; } = ""; // Foreign key to Content
+        public virtual Content? Contents { get; set; }
 
         
     }

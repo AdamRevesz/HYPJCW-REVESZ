@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class PictureLogic : IPictureLogic
+    public class PictureLogic
     {
-        IRepository<Picture> pictureRepo;
-        public PictureLogic(IRepository<Picture> pictureRepo)
+        Repository<Picture> pictureRepo;
+        public PictureLogic(Repository<Picture> pictureRepo)
         {
             this.pictureRepo = pictureRepo;
         }

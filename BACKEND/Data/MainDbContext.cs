@@ -4,65 +4,58 @@ using Models;
 
 namespace Data
 {
-    public class MainDbContext : IdentityDbContext
+    public class MainDbContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Picture> Pictures { get; set; }
         public DbSet<SalesItem> SalesItems { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Content> Contents { get; set; }
         public DbSet<Comments> Comments { get; set; }
 
-        public MainDbContext(DbContextOptions<MainDbContext> ctx) : base(ctx)
+        public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
-
-        }
-
-        public MainDbContext()
-        {
-            this.Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Use TPC mapping strategy for Content hierarchy
+            modelBuilder.Entity<Content>().UseTpcMappingStrategy();
+
+            // Configure derived entities
+            modelBuilder.Entity<Video>().ToTable("Videos");
+            modelBuilder.Entity<Picture>().ToTable("Pictures");
+            modelBuilder.Entity<Course>().ToTable("Courses");
+            modelBuilder.Entity<SalesItem>().ToTable("SalesItems");
+
+            // Configure relationships and constraints
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(u => u.UserId);
+                entity.HasKey(u => u.Id);
                 entity.HasMany(u => u.Contents)
-                         .WithOne(c => c.Owner)
-                         .HasForeignKey(c => c.OwnerId)
-                         .OnDelete(DeleteBehavior.Cascade);
+                      .WithOne(c => c.Owner)
+                      .HasForeignKey(c => c.OwnerId)
+                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(u => u.Comments)
-                        .WithOne(c => c.Poster)
-                        .HasForeignKey(c => c.PosterId)
-                        .OnDelete(DeleteBehavior.Restrict);
-
-            });
-
-            modelBuilder.Entity<Content>(entity =>
-            {
-                entity.HasKey(c => c.ContentId);
-                entity.HasMany(c => c.Comments)
-                         .WithOne(c => c.Contents)
-                         .HasForeignKey(c => c.ContentId)
-                         .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(c => c.Owner)
-                         .WithMany(u => u.Contents)
-                         .HasForeignKey(c => c.OwnerId)
-                         .OnDelete(DeleteBehavior.Cascade);
+                      .WithOne(c => c.Poster)
+                      .HasForeignKey(c => c.PosterId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Comments>(entity =>
             {
-                entity.HasKey(c => c.CommentId);
-
+                entity.HasKey(c => c.Id);
+                entity.HasOne(c => c.Poster)
+                      .WithMany(u => u.Comments)
+                      .HasForeignKey(c => c.PosterId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(c => c.Contents)
+                      .WithMany(cn => cn.Comments)
+                      .HasForeignKey(c => c.ContentId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
-            modelBuilder.Entity<Video>().HasBaseType<Content>();
-            modelBuilder.Entity<Picture>().HasBaseType<Content>();
-            modelBuilder.Entity<Course>().HasBaseType<Content>();
-            modelBuilder.Entity<SalesItem>().HasBaseType<Content>();
+
+            
 
             base.OnModelCreating(modelBuilder);
         }

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class VideoLogic : IVideoLogic
+    public class VideoLogic
     {
-        IRepository<Video> videoRepo;
-        public VideoLogic(IRepository<Video> videoRepo)
+        Repository<Video> videoRepo;
+        public VideoLogic(Repository<Video> videoRepo)
         {
             this.videoRepo = videoRepo;
         }

@@ -1,10 +1,14 @@
 using Data;
 using Logic;
 using Logic.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repository;
-using Repository.ClassRepos;
+using System.Text;
+
 namespace Backend_Feleves
 {
     public class Program
@@ -12,35 +16,62 @@ namespace Backend_Feleves
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddTransient<IRepository<User>, UserRepo>();
-            builder.Services.AddTransient<IRepository<Comments>, CommentRepo>();
-            builder.Services.AddTransient<IRepository<Content>, ContentRepo>();
-            builder.Services.AddTransient<IRepository<Course>, CourseRepo>();
-            builder.Services.AddTransient<IRepository<Picture>, PictureRepo>();
-            builder.Services.AddTransient<IRepository<SalesItem>, SalesItemRepo>();
-            builder.Services.AddTransient<IRepository<Video>, VideoRepo>();
-            builder.Services.AddScoped<ICommentLogic, CommentLogic>();
-            builder.Services.AddScoped<IUserLogic, UserLogic>();
-            builder.Services.AddScoped<IPictureLogic, PictureLogic>();
-            builder.Services.AddScoped<IContentLogic, ContentLogic>();
-            builder.Services.AddScoped<IVideoLogic, VideoLogic>();
 
-            // Add services to the container.
+            // Register the DbContext
             builder.Services.AddDbContext<MainDbContext>(options =>
             {
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BackendFeleves;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BackendFeleves2;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
                 options.UseLazyLoadingProxies();
             });
 
+            // Register the Repository with the correct generic type
+            builder.Services.AddTransient(typeof(Repository<>));
+
+            builder.Services.AddTransient<CommentLogic>();
+            builder.Services.AddTransient<UserLogic>();
+            builder.Services.AddTransient<PictureLogic>();
+            builder.Services.AddTransient<ContentLogic>();
+            builder.Services.AddTransient<VideoLogic>();
+
+            builder.Services.AddIdentity<User, IdentityRole>(
+                    option =>
+                    {
+                        option.Password.RequireDigit = false;
+                        option.Password.RequiredLength = 6;
+                        option.Password.RequireNonAlphanumeric = false;
+                        option.Password.RequireUppercase = false;
+                        option.Password.RequireLowercase = false;
+                    }
+                )
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<MainDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = "artlounge.com",
+                    ValidIssuer = "artlounge.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("NagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcs"))
+                };
+            });
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -48,12 +79,8 @@ namespace Backend_Feleves
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

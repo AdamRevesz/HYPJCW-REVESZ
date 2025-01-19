@@ -12,56 +12,55 @@ using System.Data;
 
 namespace Repository
 {
-    public abstract class Repository<T> where T : class, IIdEntity
+    
+
+    public class Repository<T> where T : class, IIdEntity
     {
-        MainDbContext ctx;
+        private readonly MainDbContext _ctx;
 
         public Repository(MainDbContext ctx)
         {
-            this.ctx = ctx;
+            _ctx = ctx;
         }
 
         public void Create(T entity)
         {
-            ctx.Set<T>().Add(entity);
-            ctx.SaveChanges();
+            _ctx.Set<T>().Add(entity);
+            _ctx.SaveChanges();
         }
 
         public T FindById(string id)
         {
-            return ctx.Set<T>().First(t => t.Id == id);
+            return _ctx.Set<T>().First(t => t.Id == id);
         }
 
         public void DeleteById(string id)
         {
             var entity = FindById(id);
-            ctx.Set<T>().Remove(entity);
-            ctx.SaveChanges();
+            _ctx.Set<T>().Remove(entity);
+            _ctx.SaveChanges();
         }
 
         public void Delete(T entity)
         {
-            ctx.Set<T>().Remove(entity);
-            ctx.SaveChanges();
+            _ctx.Set<T>().Remove(entity);
+            _ctx.SaveChanges();
         }
 
         public IQueryable<T> GetAll()
         {
-            return ctx.Set<T>();
+            return _ctx.Set<T>();
         }
 
         public void Update(T entity)
         {
             var old = FindById(entity.Id);
-            //ez reflexió - ne törődj vele mi ez :) 
-            //minden tulajdonság programozott átmásolása
             foreach (var prop in typeof(T).GetProperties())
             {
                 prop.SetValue(old, prop.GetValue(entity));
             }
-            ctx.Set<T>().Update(old);
-            ctx.SaveChanges();
+            _ctx.Set<T>().Update(old);
+            _ctx.SaveChanges();
         }
     }
 }
-

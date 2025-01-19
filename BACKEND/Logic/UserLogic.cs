@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class UserLogic : IUserLogic
+    public class UserLogic
     {
-        IRepository<User> userRepo;
-        public UserLogic(IRepository<User> userRepo)
+        Repository<User> userRepo;
+        public UserLogic(Repository<User> userRepo)
         {
             this.userRepo = userRepo;
         }

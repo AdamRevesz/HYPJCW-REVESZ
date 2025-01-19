@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class CommentLogic : ICommentLogic
+    public class CommentLogic
     {
         Repository<Comments> commentRepo;
         public CommentLogic(Repository<Comments> commentRepo)

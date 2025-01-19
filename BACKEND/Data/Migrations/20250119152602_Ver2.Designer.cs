@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250119152602_Ver2")]
+    partial class Ver2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,9 +226,9 @@ namespace Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable((string)null);
+                    b.ToTable("Contents");
 
-                    b.UseTpcMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -465,6 +468,42 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Models.Course", b =>
+                {
+                    b.HasOne("Models.Content", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Course", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Picture", b =>
+                {
+                    b.HasOne("Models.Content", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Picture", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.SalesItem", b =>
+                {
+                    b.HasOne("Models.Content", null)
+                        .WithOne()
+                        .HasForeignKey("Models.SalesItem", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Video", b =>
+                {
+                    b.HasOne("Models.Content", null)
+                        .WithOne()
+                        .HasForeignKey("Models.Video", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Content", b =>
