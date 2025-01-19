@@ -1,21 +1,23 @@
-﻿using Logic.Interfaces;
-using Models;
-using Repository;
+﻿using Logic.Helper;
+using Logic.Interfaces;
+using Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models;
 
 namespace Logic
 {
     public class ContentLogic : IContentLogic
     {
-        IRepository<Content> contentRepo;
+        Repository<Content> contentRepo;
         
-        public ContentLogic(IRepository<Content> contentRepo)
+        public ContentLogic(Repository<Content> contentRepo)
         {
             this.contentRepo = contentRepo;
         }
+        
     }
 }

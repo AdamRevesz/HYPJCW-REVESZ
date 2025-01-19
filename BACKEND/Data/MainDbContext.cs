@@ -1,24 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data
 {
-    public class MainDbContext : DbContext
+    public class MainDbContext : IdentityDbContext
     {
-        public DbSet<User>? Users { get; set; }
-        public DbSet<Video>? Videos { get; set; }
-        public DbSet<Picture>? Pictures { get; set; }
-        public DbSet<SalesItem>? SalesItems { get; set; }
-        public DbSet<Course>? Courses { get; set; }
-        public DbSet<Content>? Contents { get; set; }
-        public DbSet<Comments>? Comments { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Video> Videos { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
+        public DbSet<SalesItem> SalesItems { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<Comments> Comments { get; set; }
 
-        public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
+        public MainDbContext(DbContextOptions<MainDbContext> ctx) : base(ctx)
         {
 
         }
