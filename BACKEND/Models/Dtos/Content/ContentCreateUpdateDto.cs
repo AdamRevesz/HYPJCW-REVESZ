@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.Dtos.Content
 {
-    public class ContentCreateUpdate
+    public class ContentCreateUpdateDto
     {
         public required string Title { get; set; }
         public required string Body { get; set; }

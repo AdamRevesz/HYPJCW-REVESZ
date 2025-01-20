@@ -23,13 +23,14 @@ namespace Models
         public virtual User Owner { get; set; } = new User();
         public DateOnly CreateDate { get; set; }
         public int NumberOfLikes { get; set; }
+        public int NumberOfDislikes { get; set; }
         [NotMapped]
         public virtual List<Comments> Comments { get; set; } = new List<Comments>();
         [MaxLength(30)]
-        public string Category { get; set; } = "";
+        public string Tags { get; set; } = "";
 
 
-        public Content(string contentId, string title, string body, string ownerId, User owner, DateOnly createDate, int numberOfLikes, List<Comments> comments, string category)
+        public Content(string contentId, string title, string body, string ownerId, User owner, DateOnly createDate, int numberOfLikes, List<Comments> comments, string tags)
         {
             Id = Guid.NewGuid().ToString();
             Title = title;
@@ -37,7 +38,7 @@ namespace Models
             OwnerId = ownerId;
             Owner = owner;
             CreateDate = createDate;
-            Category = category;
+            Tags = tags;
             Comments = new List<Comments>();
         }
         public Content()

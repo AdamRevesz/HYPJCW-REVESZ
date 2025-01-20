@@ -1,5 +1,6 @@
 using Data;
 using Logic;
+using Logic.Helper;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -27,9 +28,12 @@ namespace Backend_Feleves
             // Register the Repository with the correct generic type
             builder.Services.AddTransient(typeof(Repository<>));
 
+            builder.Services.AddTransient<DtoProvider>();
             builder.Services.AddTransient<CommentLogic>();
             builder.Services.AddTransient<UserLogic>();
             builder.Services.AddTransient<PictureLogic>();
+            builder.Services.AddTransient<SalesItemLogic>();
+            builder.Services.AddTransient<CourseLogic>();
             builder.Services.AddTransient<ContentLogic>();
             builder.Services.AddTransient<VideoLogic>();
 

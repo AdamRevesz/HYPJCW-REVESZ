@@ -11,7 +11,7 @@ namespace Models.Dtos.Content
     {
         public string Id { get; set; } = "";
         public string Title { get; set; } = "";
-        public int Likes { get; set; }
+        public string ApprovalRate { get; set; } = "";
         public Models.User Owner { get; set; } = new Models.User();
         public string Category { get; set; } = "";
     }

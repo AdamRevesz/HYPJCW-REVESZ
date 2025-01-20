@@ -8,8 +8,8 @@ namespace Models.Dtos.Comment
 {
     public class CommentViewDto
     {
-        public string Username { get; set; }
-        public string Body { get; set; }
+        public string Username { get; set; } = "";
+        public string Body { get; set; } = "";
         public int Likes { get; set; }
     }
 }

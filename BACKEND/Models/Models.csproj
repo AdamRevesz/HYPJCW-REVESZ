@@ -21,4 +21,11 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Dtos\Course\" />
+	  <Folder Include="Dtos\SalesItem\" />
+	  <Folder Include="Dtos\Video\" />
+	  <Folder Include="Dtos\Picture\" />
+	</ItemGroup>
+
 </Project>
