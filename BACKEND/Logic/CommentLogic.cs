@@ -22,15 +22,19 @@ namespace Logic
             this.dtoProvider = dtoProvider;
         }
 
-        public void AddComment(CommentCreateUpdateDto dto)
+        public void AddComment(string contentId,CommentCreateUpdateDto dto)
         {
             Comments comment = dtoProvider.Mapper.Map<Comments>(dto);
+            comment.ContentId = contentId;
             commentRepo.Create(comment);
         }
 
-        public IEnumerable<CommentViewDto> GetAllComments()
+        public IEnumerable<CommentViewDto> GetAllComments(string contentId)
         {
-            return commentRepo.GetAll().Select(x => dtoProvider.Mapper.Map<CommentViewDto>(x));
+            return commentRepo
+                .GetAll()
+                .Where(c => c.ContentId == contentId)
+                .Select(x => dtoProvider.Mapper.Map<CommentViewDto>(x));
         }
 
         public void DeleteComment(string id)
