@@ -31,8 +31,7 @@ namespace Models
             FirstName = firstName;
             LastName = lastName;
         }
-
-        public User()
+        public User(string userName) : base(userName)
         {
         }
     }

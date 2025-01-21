@@ -10,6 +10,7 @@ using Models;
 using Repository;
 using Models.Dtos.Content;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Logic
 {
@@ -49,9 +50,23 @@ namespace Logic
             contentRepo.DeleteById(id);
         }
 
-        public void UpdateContent(string id,ContentCreateUpdateDto dto)
+        public void DeleteOwnerContent(string id, string userId)
+        {
+            var content = contentRepo.FindById(id);
+            if (content.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this content.");
+            }
+            contentRepo.DeleteById(id);
+        }
+
+        public void UpdateContent(string id,string userId,ContentCreateUpdateDto dto)
         {
             var old = contentRepo.FindById(id);
+            if (old.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this content.");
+            }
             dtoProvider.Mapper.Map(dto, old);
             contentRepo.Update(old);
         }

@@ -46,9 +46,23 @@ namespace Logic
             courseRepo.DeleteById(id);
         }
 
-        public void UpdateCourse(string id, CourseCreateUpdateDto dto)
+        public void DeleteOwnerCourse(string id, string userId)
+        {
+            var course = courseRepo.FindById(id);
+            if (course.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this course.");
+            }
+            courseRepo.DeleteById(id);
+        }
+
+        public void UpdateCourse(string id, CourseCreateUpdateDto dto, string userId)
         {
             var oldCourse = courseRepo.FindById(id);
+            if (oldCourse.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this course.");
+            }
             dtoProvider.Mapper.Map(dto, oldCourse);
             courseRepo.Update(oldCourse);
         }

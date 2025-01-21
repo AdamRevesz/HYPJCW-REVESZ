@@ -46,9 +46,23 @@ namespace Logic
             pictureRepo.DeleteById(id);
         }
 
-        public void UpdatePicture(string id, PictureCreateUpdateDto dto)
+        public void DeleteOwnerPicture(string id, string userId)
+        {
+            var picture = pictureRepo.FindById(id);
+            if (picture.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this picture.");
+            }
+            pictureRepo.DeleteById(id);
+        }
+
+        public void UpdatePicture(string id, PictureCreateUpdateDto dto, string userId)
         {
             var oldPicture = pictureRepo.FindById(id);
+            if (oldPicture.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this picture.");
+            }
             dtoProvider.Mapper.Map(dto, oldPicture);
             pictureRepo.Update(oldPicture);
         }

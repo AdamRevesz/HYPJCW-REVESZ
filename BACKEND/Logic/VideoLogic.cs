@@ -46,9 +46,23 @@ namespace Logic
             videoRepo.DeleteById(id);
         }
 
-        public void UpdateVideo(string id, VideoCreateUpdateDto dto)
+        public void DeleteOwnerVideo(string id, string userId)
+        {
+            var video = videoRepo.FindById(id);
+            if (video.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this video.");
+            }
+            videoRepo.DeleteById(id);
+        }
+
+        public void UpdateVideo(string id, VideoCreateUpdateDto dto, string userId)
         {
             var oldVideo = videoRepo.FindById(id);
+            if (oldVideo.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this video.");
+            }
             dtoProvider.Mapper.Map(dto, oldVideo);
             videoRepo.Update(oldVideo);
         }

@@ -39,7 +39,7 @@ namespace Data
                 entity.HasMany(u => u.Comments)
                       .WithOne(c => c.Poster)
                       .HasForeignKey(c => c.PosterId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Comments>(entity =>
@@ -48,7 +48,7 @@ namespace Data
                 entity.HasOne(c => c.Poster)
                       .WithMany(u => u.Comments)
                       .HasForeignKey(c => c.PosterId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(c => c.Contents)
                       .WithMany(cn => cn.Comments)
                       .HasForeignKey(c => c.ContentId)

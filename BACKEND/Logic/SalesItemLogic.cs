@@ -46,9 +46,23 @@ namespace Logic
             salesItemRepo.DeleteById(id);
         }
 
-        public void UpdateSalesItem(string id, SalesItemCreateUpdateDto dto)
+        public void DeleteOwnerSalesItem(string id, string userId)
+        {
+            var salesItem = salesItemRepo.FindById(id);
+            if (salesItem.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this sales item.");
+            }
+            salesItemRepo.DeleteById(id);
+        }
+
+        public void UpdateSalesItem(string id, SalesItemCreateUpdateDto dto, string userId)
         {
             var oldSalesItem = salesItemRepo.FindById(id);
+            if (oldSalesItem.OwnerId != userId)
+            {
+                throw new UnauthorizedAccessException("You are not the owner of this sales item.");
+            }
             dtoProvider.Mapper.Map(dto, oldSalesItem);
             salesItemRepo.Update(oldSalesItem);
         }

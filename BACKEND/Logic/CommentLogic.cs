@@ -13,8 +13,9 @@ namespace Logic
 {
     public class CommentLogic
     {
-        private readonly Repository<Comments> commentRepo;
-        private readonly DtoProvider dtoProvider;
+        Repository<Comments> commentRepo;
+        DtoProvider dtoProvider;
+
 
         public CommentLogic(Repository<Comments> commentRepo, DtoProvider dtoProvider)
         {
@@ -37,14 +38,27 @@ namespace Logic
                 .Select(x => dtoProvider.Mapper.Map<CommentViewDto>(x));
         }
 
-        public void DeleteComment(string id)
+        public void DeleteComment(string id, string userId)
         {
-            commentRepo.DeleteById(id);
+            var comment = commentRepo.FindById(id);
+            if(comment.PosterId == userId)
+            {
+                commentRepo.DeleteById(id);
+            }
+            else if (comment.Contents.OwnerId == userId)
+            {
+                commentRepo.DeleteById(id);
+            }
+            throw new ArgumentException("Unauthorized access");
         }
 
-        public void UpdateComment(string id, CommentCreateUpdateDto dto)
+        public void UpdateComment(string id,string userId, CommentCreateUpdateDto dto)
         {
             var oldComment = commentRepo.FindById(id);
+            if(oldComment.PosterId != userId)
+            {
+                throw new ArgumentException("You are not the owner of the comment");
+            }
             dtoProvider.Mapper.Map(dto, oldComment);
             commentRepo.Update(oldComment);
         }
