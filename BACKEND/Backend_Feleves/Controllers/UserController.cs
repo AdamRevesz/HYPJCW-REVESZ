@@ -59,12 +59,10 @@ namespace MovieClub.Endpoint.Controllers
         public async Task Register(UserInputDto dto)
         {
             var user = new User(dto.Username);
-            user.UserName = dto.Username;
             user.EmailAddress = dto.EmailAddress;
             user.Password = dto.Password;
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
-            user.BirthDate = dto.BirthDate;
             user.IsProfessional = dto.IsProfessional;
             await userManager.CreateAsync(user, dto.Password);
             if (userManager.Users.Count() == 1)
@@ -93,7 +91,7 @@ namespace MovieClub.Endpoint.Controllers
                 else
                 {
                     var claim = new List<Claim>();
-                    claim.Add(new Claim(ClaimTypes.Name, user.Username!));
+                    claim.Add(new Claim(ClaimTypes.Name, user.UserName!));
                     claim.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
                     foreach (var role in await userManager.GetRolesAsync(user))

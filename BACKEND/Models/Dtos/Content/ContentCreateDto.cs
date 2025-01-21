@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Models.Dtos.Content
 {
-    public class ContentCreateUpdateDto
+    public class ContentCreateDto
     {
         public required string Title { get; set; }
         public required string Body { get; set; }
-        public required string Category { get; set; }
+        public required string Tags { get; set; }
+        public string OwnerId { get; set; } = "";
     }
 }

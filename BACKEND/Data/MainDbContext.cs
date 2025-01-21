@@ -19,16 +19,13 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Use TPC mapping strategy for Content hierarchy
             modelBuilder.Entity<Content>().UseTpcMappingStrategy();
 
-            // Configure derived entities
             modelBuilder.Entity<Video>().ToTable("Videos");
             modelBuilder.Entity<Picture>().ToTable("Pictures");
             modelBuilder.Entity<Course>().ToTable("Courses");
             modelBuilder.Entity<SalesItem>().ToTable("SalesItems");
 
-            // Configure relationships and constraints
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(u => u.Id);

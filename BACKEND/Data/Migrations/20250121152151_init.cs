@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Ver2 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,6 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -166,29 +165,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contents",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreateDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    NumberOfLikes = table.Column<int>(type: "int", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Contents_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -206,12 +182,6 @@ namespace Data.Migrations
                         column: x => x.PosterId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Comments_Contents_ContentId",
-                        column: x => x.ContentId,
-                        principalTable: "Contents",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -220,6 +190,13 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDislikes = table.Column<int>(type: "int", nullable: false),
+                    Tags = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
                     CourseCategory = table.Column<int>(type: "int", nullable: false)
                 },
@@ -227,9 +204,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Contents_Id",
-                        column: x => x.Id,
-                        principalTable: "Contents",
+                        name: "FK_Courses_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -239,6 +216,13 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDislikes = table.Column<int>(type: "int", nullable: false),
+                    Tags = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Width = table.Column<int>(type: "int", nullable: false),
                     Height = table.Column<int>(type: "int", nullable: false)
                 },
@@ -246,9 +230,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_Pictures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pictures_Contents_Id",
-                        column: x => x.Id,
-                        principalTable: "Contents",
+                        name: "FK_Pictures_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -258,6 +242,13 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDislikes = table.Column<int>(type: "int", nullable: false),
+                    Tags = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
                     InStock = table.Column<bool>(type: "bit", nullable: false),
@@ -267,9 +258,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_SalesItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SalesItems_Contents_Id",
-                        column: x => x.Id,
-                        principalTable: "Contents",
+                        name: "FK_SalesItems_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -279,6 +270,13 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    NumberOfLikes = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDislikes = table.Column<int>(type: "int", nullable: false),
+                    Tags = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Width = table.Column<int>(type: "int", nullable: false),
                     Height = table.Column<int>(type: "int", nullable: false)
                 },
@@ -286,9 +284,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_Videos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Videos_Contents_Id",
-                        column: x => x.Id,
-                        principalTable: "Contents",
+                        name: "FK_Videos_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -343,8 +341,23 @@ namespace Data.Migrations
                 column: "PosterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contents_OwnerId",
-                table: "Contents",
+                name: "IX_Courses_OwnerId",
+                table: "Courses",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pictures_OwnerId",
+                table: "Pictures",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SalesItems_OwnerId",
+                table: "SalesItems",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_OwnerId",
+                table: "Videos",
                 column: "OwnerId");
         }
 
@@ -383,9 +396,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Contents");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

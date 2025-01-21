@@ -8,9 +8,6 @@ namespace Models
 {
     public class User : IdentityUser,IIdEntity
     {
-        [Key]
-        public string UserId { get; set; } = Guid.NewGuid().ToString();
-        public string Username { get; set; } = "";
         [EmailAddress]
         public string EmailAddress { get; set; } = "";
         public string Password { get; set; } = "";
@@ -31,6 +28,8 @@ namespace Models
             FirstName = firstName;
             LastName = lastName;
         }
+
+        public User() {}
         public User(string userName) : base(userName)
         {
         }

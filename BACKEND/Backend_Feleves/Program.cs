@@ -21,7 +21,7 @@ namespace Backend_Feleves
             // Register the DbContext
             builder.Services.AddDbContext<MainDbContext>(options =>
             {
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BackendFeleves2;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BackendFeleves;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
                 options.UseLazyLoadingProxies();
             });
 
@@ -66,7 +66,7 @@ namespace Backend_Feleves
                     ValidateAudience = true,
                     ValidAudience = "artlounge.com",
                     ValidIssuer = "artlounge.com",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("NagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcsNagyonhosszútitkosítókulcs"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MegszencségeleníthetetlenségeskedéseitekértMegszencségeleníthetetlenségeskedéseitekértMegszencségeleníthetetlenségeskedéseitekért"))
                 };
             });
 

@@ -65,7 +65,7 @@ namespace Logic.Helper
 
 
                 cfg.CreateMap<Content, ContentViewDto>();
-                cfg.CreateMap<ContentCreateUpdateDto, Content>();
+                cfg.CreateMap<ContentCreateDto, Content>();
                 cfg.CreateMap<Video, VideoViewDto>();
                 cfg.CreateMap<VideoCreateUpdateDto, Video>();
                 cfg.CreateMap<Picture, PictureViewDto>();
@@ -79,7 +79,7 @@ namespace Logic.Helper
                 .AfterMap((src, dest) =>
                 {
                     var user = userManager.Users.First(u => u.Id == src.Id);
-                    dest.Username = user.Username;
+                    dest.Username = user.UserName;
                 });
             });
 

@@ -22,7 +22,7 @@ namespace MovieClub.Endpoint.Controllers
 
         [HttpPost]
         [Authorize]
-        public void AddContent(ContentCreateUpdateDto dto)
+        public void AddContent(ContentCreateDto dto)
         {
             logic.AddContent(dto);
         }
@@ -59,7 +59,7 @@ namespace MovieClub.Endpoint.Controllers
 
         [HttpPut("/contentupdate/{id}")]
         [Authorize]
-        public IActionResult UpdateContent(string id, [FromBody] ContentCreateUpdateDto dto)
+        public IActionResult UpdateContent(string id, [FromBody] ContentCreateDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try

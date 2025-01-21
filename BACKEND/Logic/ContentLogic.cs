@@ -25,7 +25,7 @@ namespace Logic
             this.dtoProvider = dtoProvider;
         }
 
-        public void AddContent(ContentCreateUpdateDto dto)
+        public void AddContent(ContentCreateDto dto)
         {
             Content m = dtoProvider.Mapper.Map<Content>(dto);
 
@@ -60,7 +60,7 @@ namespace Logic
             contentRepo.DeleteById(id);
         }
 
-        public void UpdateContent(string id,string userId,ContentCreateUpdateDto dto)
+        public void UpdateContent(string id,string userId,ContentCreateDto dto)
         {
             var old = contentRepo.FindById(id);
             if (old.OwnerId != userId)

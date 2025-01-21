@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20250119152602_Ver2")]
-    partial class Ver2
+    [Migration("20250121152151_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,13 +202,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<DateOnly>("CreateDate")
                         .HasColumnType("date");
+
+                    b.Property<int>("NumberOfDislikes")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfLikes")
                         .HasColumnType("int");
@@ -216,6 +214,11 @@ namespace Data.Migrations
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Tags")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -226,9 +229,9 @@ namespace Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Contents");
+                    b.ToTable((string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -307,16 +310,9 @@ namespace Data.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -451,7 +447,7 @@ namespace Data.Migrations
                     b.HasOne("Models.User", "Poster")
                         .WithMany("Comments")
                         .HasForeignKey("PosterId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Contents");
@@ -468,42 +464,6 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Models.Course", b =>
-                {
-                    b.HasOne("Models.Content", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Course", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.Picture", b =>
-                {
-                    b.HasOne("Models.Content", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Picture", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.SalesItem", b =>
-                {
-                    b.HasOne("Models.Content", null)
-                        .WithOne()
-                        .HasForeignKey("Models.SalesItem", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.Video", b =>
-                {
-                    b.HasOne("Models.Content", null)
-                        .WithOne()
-                        .HasForeignKey("Models.Video", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Content", b =>
