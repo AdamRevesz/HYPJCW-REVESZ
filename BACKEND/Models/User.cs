@@ -33,5 +33,9 @@ namespace Models
         public User(string userName) : base(userName)
         {
         }
+        public async Task UpdateIsAdminStatusAsync(UserManager<User> userManager)
+        {
+            IsAdmin = await userManager.IsInRoleAsync(this, "Admin");
+        }
     }
 }

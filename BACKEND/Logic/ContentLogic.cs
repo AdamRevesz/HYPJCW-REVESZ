@@ -41,8 +41,11 @@ namespace Logic
 
         public IEnumerable<ContentShortViewDto> GetAllContent()
         {
-            return contentRepo.GetAll().Select(x => dtoProvider.Mapper.Map<ContentShortViewDto>(x)
-            );
+            var contentList = contentRepo.GetAll()
+                .Include(c => c.Owner)
+                .ToList();
+
+            return contentList.Select(x => dtoProvider.Mapper.Map<ContentShortViewDto>(x));
         }
 
         public void DeleteContent(string id)

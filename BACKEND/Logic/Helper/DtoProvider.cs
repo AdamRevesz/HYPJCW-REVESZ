@@ -58,12 +58,23 @@ namespace Logic.Helper
                 });
 
                 cfg.CreateMap<User, UserViewDto>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.IsAdmin = userManager.IsInRoleAsync(src, "Admin").Result;
-                });
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.IsAdmin, opt => opt.MapFrom(src => src.IsAdmin))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.IsProfessional, opt => opt.MapFrom(src => src.IsProfessional));
+                ;
 
-
+                cfg.CreateMap<Content, ContentShortViewDto>()
+                    .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
+                    .AfterMap((src, dest) =>
+                    {
+                        double totalVotes = src.NumberOfLikes + src.NumberOfDislikes;
+                        dest.ApprovalRate = totalVotes > 0
+                            ? (src.NumberOfLikes / totalVotes).ToString("P0")
+                            : "N/A";
+                    });
                 cfg.CreateMap<Content, ContentViewDto>();
                 cfg.CreateMap<ContentCreateDto, Content>();
                 cfg.CreateMap<Video, VideoViewDto>();
@@ -84,6 +95,12 @@ namespace Logic.Helper
             });
 
             Mapper = new Mapper(config);
+        }
+        public async Task<UserViewDto> MapUserToDtoAsync(User user)
+        {
+            var userDto = Mapper.Map<UserViewDto>(user);
+            userDto.IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
+            return userDto;
         }
     }
 }

@@ -4,7 +4,7 @@ using Models.Dtos.Video;
 using Logic;
 using System.Security.Claims;
 
-namespace MovieClub.Endpoint.Controllers
+namespace Backend_Feleves.Endpoint.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

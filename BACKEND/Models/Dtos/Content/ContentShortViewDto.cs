@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
+using Models.Dtos.User;
 
 namespace Models.Dtos.Content
 {
@@ -12,7 +13,7 @@ namespace Models.Dtos.Content
         public string Id { get; set; } = "";
         public string Title { get; set; } = "";
         public string ApprovalRate { get; set; } = "";
-        public Models.User Owner { get; set; } = new Models.User();
+        public UserViewDto Owner { get; set; } = new UserViewDto();
         public string Category { get; set; } = "";
     }
 }

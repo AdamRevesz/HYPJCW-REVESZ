@@ -19,6 +19,8 @@ namespace Models.Dtos.Course
 
         [Required]
         public Category CourseCategory { get; set; }
+        [Required]
+        public string OwnerId { get; set; }
     }
 }
 

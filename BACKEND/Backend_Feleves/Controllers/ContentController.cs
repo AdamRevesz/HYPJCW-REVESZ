@@ -7,7 +7,7 @@ using Logic;
 using System.Security.Claims;
 using Models.Dtos.Video;
 
-namespace MovieClub.Endpoint.Controllers
+namespace Backend_Feleves.Endpoint.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -58,7 +58,7 @@ namespace MovieClub.Endpoint.Controllers
         }
 
         [HttpPut("/contentupdate/{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult UpdateContent(string id, [FromBody] ContentCreateDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

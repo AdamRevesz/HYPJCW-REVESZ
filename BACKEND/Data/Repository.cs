@@ -31,7 +31,12 @@ namespace Repository
 
         public T FindById(string id)
         {
-            return _ctx.Set<T>().First(t => t.Id == id);
+            return _ctx.Set<T>().Include("Owner").FirstOrDefault(x => x.Id == id);
+        }
+
+        public IQueryable<T> GetAll()
+        {
+            return _ctx.Set<T>().Include("Owner");
         }
 
         public void DeleteById(string id)
@@ -46,12 +51,6 @@ namespace Repository
             _ctx.Set<T>().Remove(entity);
             _ctx.SaveChanges();
         }
-
-        public IQueryable<T> GetAll()
-        {
-            return _ctx.Set<T>();
-        }
-
         public void Update(T entity)
         {
             var old = FindById(entity.Id);

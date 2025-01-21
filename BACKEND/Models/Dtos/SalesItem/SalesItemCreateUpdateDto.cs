@@ -25,6 +25,9 @@ namespace Models.Dtos.SalesItem
 
         [Required]
         public int Number { get; set; }
+
+        [Required]
+        public string OwnerId { get; set; }
     }
 }
 

@@ -15,9 +15,6 @@ namespace Models.Dtos.Picture
         public string Category { get; set; } = string.Empty;
 
         [Required]
-        public int Width { get; set; }
-
-        [Required]
-        public int Height { get; set; }
+        public string OwnerId { get; set; }
     }
 }

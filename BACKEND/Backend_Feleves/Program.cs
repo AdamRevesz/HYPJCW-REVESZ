@@ -27,8 +27,9 @@ namespace Backend_Feleves
 
             // Register the Repository with the correct generic type
             builder.Services.AddTransient(typeof(Repository<>));
+            builder.Services.AddTransient(typeof(RateLogic<>));
 
-            builder.Services.AddTransient<DtoProvider>();
+            builder.Services.AddScoped<DtoProvider>();
             builder.Services.AddTransient<CommentLogic>();
             builder.Services.AddTransient<UserLogic>();
             builder.Services.AddTransient<PictureLogic>();

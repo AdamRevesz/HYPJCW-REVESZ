@@ -4,7 +4,7 @@ using Models.Dtos.Course;
 using Logic;
 using System.Security.Claims;
 
-namespace MovieClub.Endpoint.Controllers
+namespace Backend_Feleves.Endpoint.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,7 +18,7 @@ namespace MovieClub.Endpoint.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public void AddCourse(CourseCreateUpdateDto dto)
         {
             logic.AddCourse(dto);

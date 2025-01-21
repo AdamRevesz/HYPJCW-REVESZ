@@ -3,31 +3,47 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Dtos.Comment;
 using Logic;
 using System.Security.Claims;
+using Logic.Helper;
+using Microsoft.AspNetCore.Identity;
+using Models;
 
-namespace MovieClub.Endpoint.Controllers
+namespace Backend_Feleves.Endpoint.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CommentController : ControllerBase
     {
-        CommentLogic logic;
+        private readonly CommentLogic _logic;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly DtoProvider _dtoProvider;
 
-        public CommentController(CommentLogic logic)
+        public CommentController(CommentLogic logic, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider)
         {
-            this.logic = logic;
+            _logic = logic;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _dtoProvider = dtoProvider;
         }
 
         [HttpPost("/addcomment/{contentId}")]
-        [Authorize]
-        public void AddComment(string contentId, CommentCreateUpdateDto dto)
+        // [Authorize]
+        public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
         {
-            logic.AddComment(contentId, dto);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
+            _logic.AddComment(contentId, userId, dto);
+            return Ok("Comment added successfully.");
         }
 
         [HttpGet("{contentId}")]
         public IEnumerable<CommentViewDto> GetAllComments(string contentId)
         {
-            return logic.GetAllComments(contentId);
+            return _logic.GetAllComments(contentId);
         }
 
         [HttpDelete("/deletecomment/{id}")]
@@ -37,7 +53,7 @@ namespace MovieClub.Endpoint.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                logic.DeleteComment(id, userId);
+                _logic.DeleteComment(id, userId);
                 return Ok();
             }
             catch (UnauthorizedAccessException)
@@ -53,7 +69,7 @@ namespace MovieClub.Endpoint.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                logic.UpdateComment(id,userId, dto);
+                _logic.UpdateComment(id, userId, dto);
                 return Ok();
             }
             catch (UnauthorizedAccessException)
@@ -63,8 +79,3 @@ namespace MovieClub.Endpoint.Controllers
         }
     }
 }
-
-
-
-
-

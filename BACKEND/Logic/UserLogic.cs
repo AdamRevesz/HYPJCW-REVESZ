@@ -1,4 +1,5 @@
 ﻿using Logic.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Models;
 using Repository;
 using System;
@@ -16,5 +17,7 @@ namespace Logic
         {
             this.userRepo = userRepo;
         }
+
+       
     }
 }

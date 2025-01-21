@@ -8,8 +8,9 @@ using Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Models.Dtos.UserDto;
 
-namespace MovieClub.Endpoint.Controllers
+namespace Backend_Feleves.Endpoint.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -47,16 +48,31 @@ namespace MovieClub.Endpoint.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        public IEnumerable<UserViewDto> GetUsers()
+        public async Task<IEnumerable<UserViewDto>> GetUsers()
         {
-            return userManager.Users.Select(t =>
-                dtoProvider.Mapper.Map<UserViewDto>(t)
-            );
+            var users = userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                await user.UpdateIsAdminStatusAsync(userManager);
+            }
+            return users.Select(t => dtoProvider.Mapper.Map<UserViewDto>(t));
+        }
+
+        [HttpGet("/isadmin/{userid}")]
+        public async Task<IActionResult> IsAdmin(string userid)
+        {
+            var user = await userManager.FindByIdAsync(userid);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var isAdmin = await userManager.IsInRoleAsync(user, "Admin");
+            return Ok(new { IsAdmin = isAdmin });
         }
 
         [HttpPost("/register")]
-        public async Task Register(UserInputDto dto)
+        public async Task<IActionResult> Register(UserInputDto dto)
         {
             var user = new User(dto.Username);
             user.EmailAddress = dto.EmailAddress;
@@ -64,17 +80,24 @@ namespace MovieClub.Endpoint.Controllers
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.IsProfessional = dto.IsProfessional;
-            await userManager.CreateAsync(user, dto.Password);
+            var result = await userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
             if (userManager.Users.Count() == 1)
             {
-                //adminná előléptetés
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
                 await userManager.AddToRoleAsync(user, "Admin");
             }
+
+            await user.UpdateIsAdminStatusAsync(userManager);
+            return Ok(new { UserId = user.Id, IsAdmin = user.IsAdmin });
         }
 
         [HttpPost("/login")]
-        public async Task<IActionResult> Login(UserInputDto dto)
+        public async Task<IActionResult> Login(UserLoginDto dto)
         {
             var user = await userManager.FindByNameAsync(dto.Username);
             if (user == null)
