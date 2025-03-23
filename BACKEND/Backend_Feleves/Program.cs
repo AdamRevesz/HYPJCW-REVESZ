@@ -33,10 +33,11 @@ namespace Backend_Feleves
             builder.Services.AddTransient<IRepository<SalesItem>, SalesItemRepo>();
             builder.Services.AddTransient<IRepository<User>, UserRepo>();
             builder.Services.AddTransient<IRepository<Comments>, CommentRepo>();
+            builder.Services.AddTransient<IRepository<Content>, ContentRepo>();
 
             builder.Services.AddTransient(typeof(RateLogic<>));
 
-            builder.Services.AddScoped<DtoProvider>();
+            builder.Services.AddTransient<DtoProvider>();
             builder.Services.AddTransient<CommentLogic>();
             builder.Services.AddTransient<UserLogic>();
             builder.Services.AddTransient<PictureLogic>();

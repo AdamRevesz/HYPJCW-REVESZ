@@ -7,6 +7,7 @@ using Models.Dtos.Course;
 using Models.Dtos.Picture;
 using Models.Dtos.SalesItem;
 using Models.Dtos.User;
+using Models.Dtos.UserDto;
 using Models.Dtos.Video;
 using System;
 using System.Collections.Generic;
@@ -30,32 +31,72 @@ namespace Logic.Helper
                 cfg.CreateMap<Content, ContentShortViewDto>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.ApprovalRate = src.NumberOfLikes/(src.NumberOfLikes + src.NumberOfDislikes)+"%";
+                    if (src.NumberOfLikes + src.NumberOfDislikes == 0)
+                    {
+                        dest.ApprovalRate = "N/A";
+                    }
+                    else
+                    {
+                        dest.ApprovalRate = (src.NumberOfLikes / (double)(src.NumberOfLikes + src.NumberOfDislikes)).ToString("P0");
+                    }
                 });
 
                 cfg.CreateMap<Picture, PictureShortViewDto>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.ApprovalRate = src.NumberOfLikes / (src.NumberOfLikes + src.NumberOfDislikes) + "%";
+                    if (src.NumberOfLikes + src.NumberOfDislikes == 0)
+                    {
+                        dest.ApprovalRate = "N/A";
+                    }
+                    else
+                    {
+                        dest.ApprovalRate = (src.NumberOfLikes / (double)(src.NumberOfLikes + src.NumberOfDislikes)).ToString("P0");
+                    }
                 });
 
                 cfg.CreateMap<Video, VideoShortViewDto>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.ApprovalRate = src.NumberOfLikes / (src.NumberOfLikes + src.NumberOfDislikes) + "%";
+                    if (src.NumberOfLikes + src.NumberOfDislikes == 0)
+                    {
+                        dest.ApprovalRate = "N/A";
+                    }
+                    else
+                    {
+                        dest.ApprovalRate = (src.NumberOfLikes / (double)(src.NumberOfLikes + src.NumberOfDislikes)).ToString("P0");
+                    }
                 });
 
                 cfg.CreateMap<Course, CourseShortViewDto>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.ApprovalRate = src.NumberOfLikes / (src.NumberOfLikes + src.NumberOfDislikes) + "%";
+                    if (src.NumberOfLikes + src.NumberOfDislikes == 0)
+                    {
+                        dest.ApprovalRate = "N/A";
+                    }
+                    else
+                    {
+                        dest.ApprovalRate = (src.NumberOfLikes / (double)(src.NumberOfLikes + src.NumberOfDislikes)).ToString("P0");
+                    }
                 });
 
                 cfg.CreateMap<SalesItem, SalesItemShortViewDto>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.ApprovalRate = src.NumberOfLikes / (src.NumberOfLikes + src.NumberOfDislikes) + "%";
+                    if (src.NumberOfLikes + src.NumberOfDislikes == 0)
+                    {
+                        dest.ApprovalRate = "N/A";
+                    }
+                    else
+                    {
+                        dest.ApprovalRate = (src.NumberOfLikes / (double)(src.NumberOfLikes + src.NumberOfDislikes)).ToString("P0");
+                    }
                 });
+
+                cfg.CreateMap<User, UserShortViewDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.IsProfessional, opt => opt.MapFrom(src => src.IsProfessional))
+                ;
 
                 cfg.CreateMap<User, UserViewDto>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
