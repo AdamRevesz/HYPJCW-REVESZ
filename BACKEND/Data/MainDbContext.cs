@@ -13,6 +13,8 @@ namespace Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Comments> Comments { get; set; }
 
+        public DbSet<Content> Content { get; set; }
+
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
         }

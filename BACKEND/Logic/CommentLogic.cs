@@ -1,23 +1,23 @@
 ﻿using Logic.Helper;
 using Logic.Interfaces;
 using Models;
-using Repository;
 using Models.Dtos.Comment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Repo;
 
 namespace Logic
 {
     public class CommentLogic
     {
-        Repository<Comments> commentRepo;
+        IRepository<Comments> commentRepo;
         DtoProvider dtoProvider;
 
 
-        public CommentLogic(Repository<Comments> commentRepo, DtoProvider dtoProvider)
+        public CommentLogic(IRepository<Comments> commentRepo, DtoProvider dtoProvider)
         {
             this.commentRepo = commentRepo;
             this.dtoProvider = dtoProvider;
@@ -34,28 +34,28 @@ namespace Logic
         public IEnumerable<CommentViewDto> GetAllComments(string contentId)
         {
             return commentRepo
-                .GetAll()
+                .ReadAll()
                 .Where(c => c.ContentId == contentId)
                 .Select(x => dtoProvider.Mapper.Map<CommentViewDto>(x));
         }
 
         public void DeleteComment(string id, string userId)
         {
-            var comment = commentRepo.FindById(id);
+            var comment = commentRepo.Read(id);
             if(comment.PosterId == userId)
             {
-                commentRepo.DeleteById(id);
+                commentRepo.Remove(id);
             }
             else if (comment.Contents.OwnerId == userId)
             {
-                commentRepo.DeleteById(id);
+                commentRepo.Remove(id);
             }
             throw new ArgumentException("Unauthorized access");
         }
 
         public void UpdateComment(string id,string userId, CommentCreateUpdateDto dto)
         {
-            var oldComment = commentRepo.FindById(id);
+            var oldComment = commentRepo.Read(id);
             if(oldComment.PosterId != userId)
             {
                 throw new ArgumentException("You are not the owner of the comment");

@@ -7,19 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
-using Repository;
 using Models.Dtos.Content;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
+using Data.Repo;
 
 namespace Logic
 {
     public class ContentLogic
     {
-        Repository<Content> contentRepo;
+        IRepository<Content> contentRepo;
         DtoProvider dtoProvider;
         
-        public ContentLogic(Repository<Content> contentRepo, DtoProvider dtoProvider)
+        public ContentLogic(IRepository<Content> contentRepo, DtoProvider dtoProvider)
         {
             this.contentRepo = contentRepo;
             this.dtoProvider = dtoProvider;
@@ -29,7 +29,7 @@ namespace Logic
         {
             Content m = dtoProvider.Mapper.Map<Content>(dto);
 
-            if (contentRepo.GetAll().FirstOrDefault(x => x.Title == m.Title) == null)
+            if (contentRepo.ReadAll().FirstOrDefault(x => x.Title == m.Title) == null)
             {
                 contentRepo.Create(m);
             }
@@ -41,7 +41,7 @@ namespace Logic
 
         public IEnumerable<ContentShortViewDto> GetAllContent()
         {
-            var contentList = contentRepo.GetAll()
+            var contentList = contentRepo.ReadAll()
                 .Include(c => c.Owner)
                 .ToList();
 
@@ -50,22 +50,22 @@ namespace Logic
 
         public void DeleteContent(string id)
         {
-            contentRepo.DeleteById(id);
+            contentRepo.Remove(id);
         }
 
         public void DeleteOwnerContent(string id, string userId)
         {
-            var content = contentRepo.FindById(id);
+            var content = contentRepo.Read(id);
             if (content.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this content.");
             }
-            contentRepo.DeleteById(id);
+            contentRepo.Remove(id);
         }
 
         public void UpdateContent(string id,string userId,ContentCreateDto dto)
         {
-            var old = contentRepo.FindById(id);
+            var old = contentRepo.Read(id);
             if (old.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this content.");
@@ -76,7 +76,7 @@ namespace Logic
 
         public ContentViewDto GetContent(string id)
         {
-            var model = contentRepo.FindById(id);
+            var model = contentRepo.Read(id);
             return dtoProvider.Mapper.Map<ContentViewDto>(model);
         }
         

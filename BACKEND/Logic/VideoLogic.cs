@@ -1,22 +1,22 @@
 ﻿using Logic.Helper;
 using Logic.Interfaces;
 using Models;
-using Repository;
 using Models.Dtos.Video;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Repo;
 
 namespace Logic
 {
     public class VideoLogic
     {
-        private readonly Repository<Video> videoRepo;
-        private readonly DtoProvider dtoProvider;
+        IRepository<Video> videoRepo;
+        DtoProvider dtoProvider;
 
-        public VideoLogic(Repository<Video> videoRepo, DtoProvider dtoProvider)
+        public VideoLogic(IRepository<Video> videoRepo, DtoProvider dtoProvider)
         {
             this.videoRepo = videoRepo;
             this.dtoProvider = dtoProvider;
@@ -26,7 +26,7 @@ namespace Logic
         {
             Video video = dtoProvider.Mapper.Map<Video>(dto);
 
-            if (videoRepo.GetAll().FirstOrDefault(x => x.Title == video.Title) == null)
+            if (videoRepo.ReadAll().FirstOrDefault(x => x.Title == video.Title) == null)
             {
                 videoRepo.Create(video);
             }
@@ -38,27 +38,27 @@ namespace Logic
 
         public IEnumerable<VideoShortViewDto> GetAllVideos()
         {
-            return videoRepo.GetAll().Select(x => dtoProvider.Mapper.Map<VideoShortViewDto>(x));
+            return videoRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<VideoShortViewDto>(x));
         }
 
         public void DeleteVideo(string id)
         {
-            videoRepo.DeleteById(id);
+            videoRepo.Remove(id);
         }
 
         public void DeleteOwnerVideo(string id, string userId)
         {
-            var video = videoRepo.FindById(id);
+            var video = videoRepo.Read(id);
             if (video.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this video.");
             }
-            videoRepo.DeleteById(id);
+            videoRepo.Remove(id);
         }
 
         public void UpdateVideo(string id, VideoCreateUpdateDto dto, string userId)
         {
-            var oldVideo = videoRepo.FindById(id);
+            var oldVideo = videoRepo.Read(id);
             if (oldVideo.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this video.");
@@ -69,7 +69,7 @@ namespace Logic
 
         public VideoViewDto GetVideo(string id)
         {
-            var video = videoRepo.FindById(id);
+            var video = videoRepo.Read(id);
             return dtoProvider.Mapper.Map<VideoViewDto>(video);
         }
     }

@@ -1,22 +1,22 @@
 ﻿using Logic.Helper;
 using Logic.Interfaces;
 using Models;
-using Repository;
 using Models.Dtos.Course;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Repo;
 
 namespace Logic
 {
     public class CourseLogic
     {
-        private readonly Repository<Course> courseRepo;
-        private readonly DtoProvider dtoProvider;
+        IRepository<Course> courseRepo;
+        DtoProvider dtoProvider;
 
-        public CourseLogic(Repository<Course> courseRepo, DtoProvider dtoProvider)
+        public CourseLogic(IRepository<Course> courseRepo, DtoProvider dtoProvider)
         {
             this.courseRepo = courseRepo;
             this.dtoProvider = dtoProvider;
@@ -26,7 +26,7 @@ namespace Logic
         {
             Course course = dtoProvider.Mapper.Map<Course>(dto);
 
-            if (courseRepo.GetAll().FirstOrDefault(x => x.Title == course.Title) == null)
+            if (courseRepo.ReadAll().FirstOrDefault(x => x.Title == course.Title) == null)
             {
                 courseRepo.Create(course);
             }
@@ -38,27 +38,27 @@ namespace Logic
 
         public IEnumerable<CourseShortViewDto> GetAllCourses()
         {
-            return courseRepo.GetAll().Select(x => dtoProvider.Mapper.Map<CourseShortViewDto>(x));
+            return courseRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<CourseShortViewDto>(x));
         }
 
         public void DeleteCourse(string id)
         {
-            courseRepo.DeleteById(id);
+            courseRepo.Remove(id);
         }
 
         public void DeleteOwnerCourse(string id, string userId)
         {
-            var course = courseRepo.FindById(id);
+            var course = courseRepo.Read(id);
             if (course.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this course.");
             }
-            courseRepo.DeleteById(id);
+            courseRepo.Remove(id);
         }
 
         public void UpdateCourse(string id, CourseCreateUpdateDto dto, string userId)
         {
-            var oldCourse = courseRepo.FindById(id);
+            var oldCourse = courseRepo.Read(id);
             if (oldCourse.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this course.");
@@ -69,7 +69,7 @@ namespace Logic
 
         public CourseViewDto GetCourse(string id)
         {
-            var course = courseRepo.FindById(id);
+            var course = courseRepo.Read(id);
             return dtoProvider.Mapper.Map<CourseViewDto>(course);
         }
     }

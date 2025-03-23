@@ -1,7 +1,7 @@
-﻿using Logic.Interfaces;
+﻿using Data.Repo;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

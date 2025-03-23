@@ -1,4 +1,6 @@
 using Data;
+using Data.ClassRepo;
+using Data.Repo;
 using Logic;
 using Logic.Helper;
 using Logic.Interfaces;
@@ -7,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models;
-using Repository;
 using System.Text;
 
 namespace Backend_Feleves
@@ -26,7 +27,13 @@ namespace Backend_Feleves
             });
 
             // Register the Repository with the correct generic type
-            builder.Services.AddTransient(typeof(Repository<>));
+            builder.Services.AddTransient<IRepository<Video>, VideoRepo>();
+            builder.Services.AddTransient<IRepository<Picture>, PictureRepo>();
+            builder.Services.AddTransient<IRepository<Course>, CourseRepo>();
+            builder.Services.AddTransient<IRepository<SalesItem>, SalesItemRepo>();
+            builder.Services.AddTransient<IRepository<User>, UserRepo>();
+            builder.Services.AddTransient<IRepository<Comments>, CommentRepo>();
+
             builder.Services.AddTransient(typeof(RateLogic<>));
 
             builder.Services.AddScoped<DtoProvider>();

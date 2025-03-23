@@ -1,22 +1,22 @@
 ﻿using Logic.Helper;
 using Logic.Interfaces;
 using Models;
-using Repository;
 using Models.Dtos.SalesItem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Repo;
 
 namespace Logic
 {
     public class SalesItemLogic
     {
-        private readonly Repository<SalesItem> salesItemRepo;
+        private readonly IRepository<SalesItem> salesItemRepo;
         private readonly DtoProvider dtoProvider;
 
-        public SalesItemLogic(Repository<SalesItem> salesItemRepo, DtoProvider dtoProvider)
+        public SalesItemLogic(IRepository<SalesItem> salesItemRepo, DtoProvider dtoProvider)
         {
             this.salesItemRepo = salesItemRepo;
             this.dtoProvider = dtoProvider;
@@ -26,7 +26,7 @@ namespace Logic
         {
             SalesItem salesItem = dtoProvider.Mapper.Map<SalesItem>(dto);
 
-            if (salesItemRepo.GetAll().FirstOrDefault(x => x.Title == salesItem.Title) == null)
+            if (salesItemRepo.ReadAll().FirstOrDefault(x => x.Title == salesItem.Title) == null)
             {
                 salesItemRepo.Create(salesItem);
             }
@@ -38,27 +38,27 @@ namespace Logic
 
         public IEnumerable<SalesItemShortViewDto> GetAllSalesItems()
         {
-            return salesItemRepo.GetAll().Select(x => dtoProvider.Mapper.Map<SalesItemShortViewDto>(x));
+            return salesItemRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<SalesItemShortViewDto>(x));
         }
 
         public void DeleteSalesItem(string id)
         {
-            salesItemRepo.DeleteById(id);
+            salesItemRepo.Remove(id);
         }
 
         public void DeleteOwnerSalesItem(string id, string userId)
         {
-            var salesItem = salesItemRepo.FindById(id);
+            var salesItem = salesItemRepo.Read(id);
             if (salesItem.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this sales item.");
             }
-            salesItemRepo.DeleteById(id);
+            salesItemRepo.Remove(id);
         }
 
         public void UpdateSalesItem(string id, SalesItemCreateUpdateDto dto, string userId)
         {
-            var oldSalesItem = salesItemRepo.FindById(id);
+            var oldSalesItem = salesItemRepo.Read(id);
             if (oldSalesItem.OwnerId != userId)
             {
                 throw new UnauthorizedAccessException("You are not the owner of this sales item.");
@@ -69,7 +69,7 @@ namespace Logic
 
         public SalesItemViewDto GetSalesItem(string id)
         {
-            var salesItem = salesItemRepo.FindById(id);
+            var salesItem = salesItemRepo.Read(id);
             return dtoProvider.Mapper.Map<SalesItemViewDto>(salesItem);
         }
     }
