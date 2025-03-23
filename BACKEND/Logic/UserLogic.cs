@@ -12,8 +12,8 @@ namespace Logic
 {
     public class UserLogic
     {
-        Repository<User> userRepo;
-        public UserLogic(Repository<User> userRepo)
+        IRepository<User> userRepo;
+        public UserLogic(IRepository<User> userRepo)
         {
             this.userRepo = userRepo;
         }
