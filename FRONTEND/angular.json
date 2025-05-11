@@ -49,6 +49,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
+              "src/icon.svg",
               {
                 
                 "glob": "**/*",
