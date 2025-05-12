@@ -26,26 +26,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             _dtoProvider = dtoProvider;
         }
 
-        [HttpPost("/addcomment")]
-        // [Authorize]
-        public IActionResult AddComment(string userId,string contentId, CommentCreateUpdateDto dto)
+        [HttpPost("/api/addcomment")]
+        [Authorize]
+        public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
         {
-            //if (string.IsNullOrEmpty(userId))
-            //{
-            //    return Unauthorized("User is not logged in.");
-            //}
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not logged in.");
+            }
 
             _logic.AddComment(contentId, userId, dto);
             return Ok("Comment added successfully.");
         }
 
-        [HttpGet("{contentId}")]
+        [HttpGet("/api/{contentId}")]
         public async Task<IEnumerable<CommentViewDto>> GetAllComments(string contentId)
         {
             return await _logic.GetAllComments(contentId);
         }
 
-        [HttpDelete("/deletecomment/{id}")]
+        [HttpDelete("/api/deletecomment/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteComment(string id)
         {
@@ -61,7 +62,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/updatecomment/{id}")]
+        [HttpPut("/api/updatecomment/{id}")]
         [Authorize]
         public IActionResult UpdateComment(string id, [FromBody] CommentCreateUpdateDto dto)
         {

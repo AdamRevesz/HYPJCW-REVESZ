@@ -26,6 +26,10 @@ namespace Repository
 
         public void Create(T entity)
         {
+            if (entity is IIdEntity idEntity && string.IsNullOrEmpty(idEntity.Id))
+            {
+                idEntity.Id = Guid.NewGuid().ToString();
+            }
             ctx.Set<T>().Add(entity);
             ctx.SaveChanges();
         }
