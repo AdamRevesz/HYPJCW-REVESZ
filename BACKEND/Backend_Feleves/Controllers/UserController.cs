@@ -20,11 +20,22 @@ namespace Backend_Feleves.Endpoint.Controllers
         RoleManager<IdentityRole> roleManager;
         DtoProvider dtoProvider;
 
-        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider)
+        private readonly SignInManager<User> _signInManager;
+   
+  public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider, SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dtoProvider = dtoProvider;
+            _signInManager = signInManager;
+
+            Task.Run(async () =>
+            {
+                if (!await roleManager.RoleExistsAsync("User"))
+                {
+                    await roleManager.CreateAsync(new IdentityRole("User"));
+                }
+            }).Wait();
         }
 
         [HttpGet("/grantadmin/{userid}")]

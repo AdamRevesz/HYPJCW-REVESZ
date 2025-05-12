@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
+using Data.ClassRepo;
 
 namespace Logic
 {
@@ -27,16 +28,18 @@ namespace Logic
         {
             Comments comment = dtoProvider.Mapper.Map<Comments>(dto);
             comment.ContentId = contentId;
-            comment.PosterId = userId; // Ensure PosterId is set
+            comment.PosterId = userId;
             commentRepo.Create(comment);
         }
 
-        public IEnumerable<CommentViewDto> GetAllComments(string contentId)
+        public async Task<IEnumerable<CommentViewDto>> GetAllComments(string contentId)
         {
-            return commentRepo
+            var comments = commentRepo
                 .ReadAll()
                 .Where(c => c.ContentId == contentId)
-                .Select(x => dtoProvider.Mapper.Map<CommentViewDto>(x));
+                .ToList();
+
+            return await dtoProvider.MapCommentsToDtosAsync(comments);
         }
 
         public void DeleteComment(string id, string userId)

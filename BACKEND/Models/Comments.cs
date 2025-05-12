@@ -16,7 +16,7 @@ namespace Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; } = "";
         public string PosterId { get; set; } = ""; // Foreign key to User
-        public virtual User? Poster { get; set; }
+        public virtual User? Owner { get; set; }
         public string Body { get; set; } = "";
         public int Likes { get; set; }
         public string ContentId { get; set; } = ""; // Foreign key to Content

@@ -10,7 +10,6 @@ namespace Models.Dtos.Comment
 {
     public class CommentCreateUpdateDto
     {
-        public required string ContentId { get; set; } = "";
         [MaxLength(1000)]
         public required string Body { get; set; }
     }

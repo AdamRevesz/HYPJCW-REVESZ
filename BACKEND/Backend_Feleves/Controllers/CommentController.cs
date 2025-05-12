@@ -26,24 +26,23 @@ namespace Backend_Feleves.Endpoint.Controllers
             _dtoProvider = dtoProvider;
         }
 
-        [HttpPost("/addcomment/{contentId}")]
+        [HttpPost("/addcomment")]
         // [Authorize]
-        public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
+        public IActionResult AddComment(string userId,string contentId, CommentCreateUpdateDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User is not logged in.");
-            }
+            //if (string.IsNullOrEmpty(userId))
+            //{
+            //    return Unauthorized("User is not logged in.");
+            //}
 
             _logic.AddComment(contentId, userId, dto);
             return Ok("Comment added successfully.");
         }
 
         [HttpGet("{contentId}")]
-        public IEnumerable<CommentViewDto> GetAllComments(string contentId)
+        public async Task<IEnumerable<CommentViewDto>> GetAllComments(string contentId)
         {
-            return _logic.GetAllComments(contentId);
+            return await _logic.GetAllComments(contentId);
         }
 
         [HttpDelete("/deletecomment/{id}")]

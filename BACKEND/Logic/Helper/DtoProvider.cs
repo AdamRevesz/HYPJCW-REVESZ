@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Dtos.Comment;
 using Models.Dtos.Content;
@@ -128,11 +129,7 @@ namespace Logic.Helper
                 cfg.CreateMap<SalesItemCreateUpdateDto, SalesItem>();
                 cfg.CreateMap<CommentCreateUpdateDto, Comments>();
                 cfg.CreateMap<Comments, CommentViewDto>()
-                .AfterMap((src, dest) =>
-                {
-                    var user = userManager.Users.First(u => u.Id == src.Id);
-                    dest.Username = user.UserName;
-                });
+            .ForMember(dest => dest.Username, opt => opt.Ignore());
             });
 
             Mapper = new Mapper(config);
@@ -142,6 +139,46 @@ namespace Logic.Helper
             var userDto = Mapper.Map<UserViewDto>(user);
             userDto.IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
             return userDto;
+        }
+        public async Task<List<CommentViewDto>> MapCommentsToDtosAsync(List<Comments> comments)
+        {
+            // Pre-fetch user data
+            var userIds = comments.Select(c => c.PosterId).Distinct().ToList();
+            var users = await userManager.Users.AsNoTracking()
+                .Where(u => userIds.Contains(u.Id))
+                .ToDictionaryAsync(u => u.Id, u => u.UserName);
+
+            // Map comments to DTOs
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comments, CommentViewDto>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.Username = users.ContainsKey(src.PosterId) ? users[src.PosterId] : "Unknown";
+                    });
+            });
+
+            var mapper = new Mapper(config);
+            return comments.Select(c => mapper.Map<CommentViewDto>(c)).ToList();
+        }
+        public CommentViewDto MapCommentToDto(Comments comment, Dictionary<string, string> usernameCache = null)
+        {
+            var dto = Mapper.Map<CommentViewDto>(comment);
+
+            // If a username cache is provided, use it
+            if (usernameCache != null && usernameCache.ContainsKey(comment.PosterId))
+            {
+                dto.Username = usernameCache[comment.PosterId];
+            }
+            else
+            {
+                // Otherwise look it up individually - this is less efficient
+                var user = userManager.Users.AsNoTracking()
+                    .FirstOrDefault(u => u.Id == comment.PosterId);
+                dto.Username = user?.UserName ?? "Unknown";
+            }
+
+            return dto;
         }
     }
 }

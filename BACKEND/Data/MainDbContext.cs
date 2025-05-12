@@ -12,7 +12,6 @@ namespace Data
         public DbSet<SalesItem> SalesItems { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Comments> Comments { get; set; }
-
         public DbSet<Content> Content { get; set; }
 
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
@@ -36,7 +35,7 @@ namespace Data
                       .HasForeignKey(c => c.OwnerId)
                       .OnDelete(DeleteBehavior.Cascade);
                 entity.HasMany(u => u.Comments)
-                      .WithOne(c => c.Poster)
+                      .WithOne(c => c.Owner)
                       .HasForeignKey(c => c.PosterId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
@@ -44,7 +43,7 @@ namespace Data
             modelBuilder.Entity<Comments>(entity =>
             {
                 entity.HasKey(c => c.Id);
-                entity.HasOne(c => c.Poster)
+                entity.HasOne(c => c.Owner)
                       .WithMany(u => u.Comments)
                       .HasForeignKey(c => c.PosterId)
                       .OnDelete(DeleteBehavior.Cascade);
