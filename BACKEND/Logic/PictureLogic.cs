@@ -67,6 +67,13 @@ namespace Logic
             pictureRepo.Update(oldPicture);
         }
 
+        public void UpdatePictureAdmin(string id, PictureCreateUpdateDto dto)
+        {
+            var oldPicture = pictureRepo.Read(id);
+            dtoProvider.Mapper.Map(dto, oldPicture);
+            pictureRepo.Update(oldPicture);
+        }
+
         public PictureViewDto GetPicture(string id)
         {
             var picture = pictureRepo.Read(id);

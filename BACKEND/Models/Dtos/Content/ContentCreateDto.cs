@@ -9,6 +9,7 @@ namespace Models.Dtos.Content
     public class ContentCreateDto
     {
         public required string Title { get; set; }
+        public string FilePath { get; set; } = "";
         public required string Body { get; set; }
         public required string Tags { get; set; }
         public string OwnerId { get; set; } = "";

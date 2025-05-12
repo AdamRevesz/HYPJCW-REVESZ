@@ -16,7 +16,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.rateLogic = rateLogic;
         }
 
-        [HttpPost("/likes/{id}")]
+        [HttpPost("{id}/like")]
         public IActionResult Like(string id)
         {
             try
@@ -30,7 +30,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPost("/disklikes/{id}")]
+        [HttpPost("{id}/dislike")]
         public IActionResult Dislike(string id)
         {
             try

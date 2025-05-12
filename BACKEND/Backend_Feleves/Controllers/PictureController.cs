@@ -17,27 +17,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost("/contents")]
-        [Authorize]
+        [HttpPost]
+        //[Authorize]
         public void AddPicture(PictureCreateUpdateDto dto)
         {
             logic.AddPicture(dto);
         }
 
-        [HttpGet("/contents")]
+        [HttpGet]
         public IEnumerable<PictureShortViewDto> GetAllPictures()
         {
             return logic.GetAllPictures();
         }
 
-        [HttpDelete("/pictures/{id}")]
+        [HttpDelete("/deletepicture/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeletePicture(string id)
         {
             logic.DeletePicture(id);
         }
 
-        [HttpDelete("/pictures/{id}")]
+        [HttpDelete("/deleteownerpicture/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerPicture(string id)
         {
@@ -53,8 +53,8 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/pictures/{id}")]
-        [Authorize]
+        [HttpPut("/updatepicture/{id}")]
+        //[Authorize]
         public IActionResult UpdatePicture(string id, [FromBody] PictureCreateUpdateDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -69,7 +69,14 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/pictures/{id}")]
+        [HttpPut("/updatepictureadmin/{id}")]
+        public IActionResult UpdatePictureAdmin(string id, [FromBody] PictureCreateUpdateDto dto)
+        {
+            logic.UpdatePictureAdmin(id, dto);
+            return Ok();
+        }
+
+        [HttpGet("/getpicture/{id}")]
         public PictureViewDto GetPicture(string id)
         {
             return logic.GetPicture(id);

@@ -7,6 +7,7 @@ namespace Models.Dtos.Picture
     {
         [Required]
         public string Title { get; set; } = string.Empty;
+        public string filePath { get; set; } = "";
 
         [Required]
         public string Body { get; set; } = string.Empty;

@@ -17,27 +17,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost("/contents")]
+        [HttpPost]
         //[Authorize]
         public void AddCourse(CourseCreateUpdateDto dto)
         {
             logic.AddCourse(dto);
         }
 
-        [HttpGet("/contents")]
+        [HttpGet]
         public IEnumerable<CourseShortViewDto> GetAllCourses()
         {
             return logic.GetAllCourses();
         }
 
-        [HttpDelete("/courses/{id}")]
+        [HttpDelete("/deletecourse/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeleteCourse(string id)
         {
             logic.DeleteCourse(id);
         }
 
-        [HttpDelete("/courses/{id}")]
+        [HttpDelete("/deleteownercourse/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerCourse(string id)
         {
@@ -53,7 +53,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/courses/{id}")]
+        [HttpPut("/updatecourse/{id}")]
         [Authorize]
         public IActionResult UpdateCourse(string id, [FromBody] CourseCreateUpdateDto dto)
         {
@@ -69,7 +69,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/courses/{id}")]
+        [HttpGet("/getcourse/{id}")]
         public CourseViewDto GetCourse(string id)
         {
             return logic.GetCourse(id);

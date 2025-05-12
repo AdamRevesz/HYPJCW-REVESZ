@@ -39,7 +39,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpGet("/grantadmin/{userid}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task GrantAdmin(string userid)
         {
             var user = await userManager.FindByIdAsync(userid);
@@ -58,7 +58,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             await userManager.RemoveFromRoleAsync(user, "Admin");
         }
 
-        [HttpGet("/users")]
+        [HttpGet]
         public async Task<IEnumerable<UserViewDto>> GetUsers()
         {
             var users = userManager.Users.ToList();
