@@ -17,27 +17,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
-        //[Authorize]
+        [HttpPost("/contents")]
+        [Authorize]
         public void AddPicture(PictureCreateUpdateDto dto)
         {
             logic.AddPicture(dto);
         }
 
-        [HttpGet]
+        [HttpGet("/contents")]
         public IEnumerable<PictureShortViewDto> GetAllPictures()
         {
             return logic.GetAllPictures();
         }
 
-        [HttpDelete("/deletepicture/{id}")]
+        [HttpDelete("/pictures/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeletePicture(string id)
         {
             logic.DeletePicture(id);
         }
 
-        [HttpDelete("/deleteownerpicture/{id}")]
+        [HttpDelete("/pictures/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerPicture(string id)
         {
@@ -53,7 +53,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/updatepicture/{id}")]
+        [HttpPut("/pictures/{id}")]
         [Authorize]
         public IActionResult UpdatePicture(string id, [FromBody] PictureCreateUpdateDto dto)
         {
@@ -69,7 +69,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/getpicture/{id}")]
+        [HttpGet("/pictures/{id}")]
         public PictureViewDto GetPicture(string id)
         {
             return logic.GetPicture(id);

@@ -58,7 +58,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             await userManager.RemoveFromRoleAsync(user, "Admin");
         }
 
-        [HttpGet]
+        [HttpGet("/users")]
         public async Task<IEnumerable<UserViewDto>> GetUsers()
         {
             var users = userManager.Users.ToList();

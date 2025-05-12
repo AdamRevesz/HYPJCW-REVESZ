@@ -20,20 +20,20 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
+        [HttpPost("/contents")]
         [Authorize]
         public void AddContent(ContentCreateDto dto)
         {
             logic.AddContent(dto);
         }
 
-        [HttpGet]
+        [HttpGet("/contents")]
         public IEnumerable<ContentShortViewDto> GetAllContent()
         {
             return logic.GetAllContent();
         }
 
-        [HttpDelete("/api/contentdelete/{id}")]
+        [HttpDelete("/contents/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeleteContent(string id)
         {
@@ -41,7 +41,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
 
-        [HttpDelete("/contentownerdelete/{id}")]
+        [HttpDelete("/contents/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerContent(string id)
         {
@@ -57,7 +57,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/contentupdate/{id}")]
+        [HttpPut("/contents/{id}")]
         //[Authorize]
         public IActionResult UpdateContent(string id, [FromBody] ContentCreateDto dto)
         {
@@ -73,7 +73,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/getcontent/{id}")]
+        [HttpGet("/contents/{id}")]
         public ContentViewDto GetContent(string id)
         {
             return logic.GetContent(id);

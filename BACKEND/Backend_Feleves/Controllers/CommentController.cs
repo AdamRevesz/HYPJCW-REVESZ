@@ -26,7 +26,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             _dtoProvider = dtoProvider;
         }
 
-        [HttpPost("/api/addcomment")]
+        [HttpPost("/comments")]
         [Authorize]
         public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
         {
@@ -40,13 +40,13 @@ namespace Backend_Feleves.Endpoint.Controllers
             return Ok("Comment added successfully.");
         }
 
-        [HttpGet("/api/{contentId}")]
+        [HttpGet("/comments/{contentId}")]
         public async Task<IEnumerable<CommentViewDto>> GetAllComments(string contentId)
         {
             return await _logic.GetAllComments(contentId);
         }
 
-        [HttpDelete("/api/deletecomment/{id}")]
+        [HttpDelete("/comments/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteComment(string id)
         {
@@ -62,7 +62,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/api/updatecomment/{id}")]
+        [HttpPut("/comments/{id}")]
         [Authorize]
         public IActionResult UpdateComment(string id, [FromBody] CommentCreateUpdateDto dto)
         {

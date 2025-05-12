@@ -17,7 +17,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
+        [HttpPost("/salesitems")]
         [Authorize]
         public void AddSalesItem(SalesItemCreateUpdateDto dto)
         {
@@ -30,14 +30,14 @@ namespace Backend_Feleves.Endpoint.Controllers
             return logic.GetAllSalesItems();
         }
 
-        [HttpDelete("/deletesalesitem/{id}")]
+        [HttpDelete("/salesitems/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeleteSalesItem(string id)
         {
             logic.DeleteSalesItem(id);
         }
 
-        [HttpDelete("/deleteownersalesitem/{id}")]
+        [HttpDelete("/salesitems/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerSalesItem(string id)
         {
@@ -53,7 +53,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/updatesalesitem/{id}")]
+        [HttpPut("/salesitems/{id}")]
         [Authorize]
         public IActionResult UpdateSalesItem(string id, [FromBody] SalesItemCreateUpdateDto dto)
         {
@@ -69,7 +69,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/getsalesitem/{id}")]
+        [HttpGet("/salesitems/{id}")]
         public SalesItemViewDto GetSalesItem(string id)
         {
             return logic.GetSalesItem(id);

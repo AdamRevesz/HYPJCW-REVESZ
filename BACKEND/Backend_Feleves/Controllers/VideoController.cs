@@ -17,27 +17,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
+        [HttpPost("/videos")]
         [Authorize]
         public void AddVideo(VideoCreateUpdateDto dto)
         {
             logic.AddVideo(dto);
         }
 
-        [HttpGet]
+        [HttpGet("/videos")]
         public IEnumerable<VideoShortViewDto> GetAllVideos()
         {
             return logic.GetAllVideos();
         }
 
-        [HttpDelete("/deletevideo/{id}")]
+        [HttpDelete("/videos/{id}")]
         [Authorize(Roles = "Admin")]
         public void DeleteVideo(string id)
         {
             logic.DeleteVideo(id);
         }
 
-        [HttpDelete("/deleteownervideo/{id}")]
+        [HttpDelete("/videos/{id}")]
         [Authorize(Roles = "User")]
         public IActionResult DeleteOwnerVideo(string id)
         {
@@ -53,7 +53,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpPut("/updatevideo/{id}")]
+        [HttpPut("/videos/{id}")]
         [Authorize]
         public IActionResult UpdateVideo(string id, [FromBody] VideoCreateUpdateDto dto)
         {
@@ -69,7 +69,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             }
         }
 
-        [HttpGet("/getvideo/{id}")]
+        [HttpGet("/videos/{id}")]
         public VideoViewDto GetVideo(string id)
         {
             return logic.GetVideo(id);
