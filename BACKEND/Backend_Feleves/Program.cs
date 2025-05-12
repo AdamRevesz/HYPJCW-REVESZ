@@ -95,7 +95,7 @@ namespace Backend_Feleves
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieClub API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend_Feleves_Artista", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
