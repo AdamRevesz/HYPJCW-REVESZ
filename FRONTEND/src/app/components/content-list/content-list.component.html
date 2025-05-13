@@ -16,27 +16,34 @@
         <p>No content items found.</p>
     </div>
 
-    <button class="btn btn-primary" routerLink="/upload">Upload your own picture</button>
+    <button class="btn btn-primary upload-button p-3 sansation-regular fixed" routerLink="/upload">Upload your own picture</button>
     <div *ngIf="!isLoading && !error && contents.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         
         <div *ngFor="let contentItem of contents" class="col">
             <div class="container p-4"></div>
-            <div class="card h-200 shadow-sm rounded">
+            <div class="card d-flex shadow-sm rounded">
                 <div class="card-body d-flex flex-column rounded"
                          [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
-                         style="background-size: cover; background-position: center; min-height: 300px; color: white;">
+                         style="background-size: cover; background-position: center; min-height: 500px; color: white;">
                         
+                          <button 
+                            *ngIf="contentItem.id" 
+                            (click)="confirmDelete(contentItem.id, contentItem.title)" 
+                            class="btn btn-danger btn-m position-absolute bottom-0 end-0 m-2" 
+                            title="Delete {{contentItem.title}}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
                         <div class="mt-auto">
                             <h5 class="card-title">{{ contentItem.title }}</h5>
                             <p class="card-text mb-1">
                                 {{ contentItem.owner.username }}
                                 <span class="badge bg-secondary ms-1">{{ contentItem.owner.isProfessional ? 'Professional' : 'User' }}</span>
                             </p>
-                            <p class="card-text sansation-regular">Approval Rate: {{ contentItem.approvalRate }}</p>
+                            <p class="card-text sansation-regular" style="color:white">Approval Rate: {{ contentItem.approvalRate }}</p>
                             <p class="card-text mb-1"><small class="text-light">{{ contentItem.category }}</small></p>
                         </div>
-                </div>
+                    </div>
             </div>
         </div>
     </div>
-

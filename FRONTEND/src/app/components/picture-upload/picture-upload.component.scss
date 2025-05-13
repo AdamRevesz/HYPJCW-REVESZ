@@ -60,18 +60,3 @@
   display: none;
 }
 
-.upload-button {
-  background-color: #5c2ca8;
-  border-width: 0;
-  color: white;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #4a2388;
-  }
-
-  &:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-}

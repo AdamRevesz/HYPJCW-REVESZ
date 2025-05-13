@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-picture-upload',
@@ -21,7 +22,8 @@ export class PictureUploadComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router,
   ) {}
   
   ngOnInit(): void {
@@ -80,6 +82,7 @@ export class PictureUploadComponent implements OnInit {
         console.log('Picture uploaded successfully');
         this.resetForm();
         this.isSubmitting = false;
+        this.router.navigate(['/list']);
       },
       error: (error: HttpErrorResponse) => {
         this.uploadError = `Failed to upload picture: ${error.message || 'Unknown error'}`;

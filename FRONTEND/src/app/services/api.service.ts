@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import {
   UserShortViewDto,
   ContentShortViewDto,
@@ -18,8 +18,10 @@ import {
 })
 export class ApiService {
   private backendUrl = 'https://localhost:7024';
+
+  private contentAddedSource = new Subject<void>();
+  contentAdded$ = this.contentAddedSource.asObservable();
   
-  private useMockData = false;
 
   constructor(private http: HttpClient) { }
 
@@ -35,8 +37,25 @@ export class ApiService {
     return this.http.post<void>(`${this.backendUrl}/api/Content`, contentData);
   }
 
-  // Update the method signature to match how we're using it
   addPicture(pictureData: FormData): Observable<void> {
-    return this.http.post<void>(`${this.backendUrl}/addpicture`, pictureData);
+    return this.http.post<void>(`${this.backendUrl}/addpicture`, pictureData).pipe(
+      tap(()=>{
+        this.contentAddedSource.next();
+      })
+    );
+  }
+
+  deletePicture(id: string): Observable<void>{
+    console.log(`ApiService: deletePicture called for ID: ${id}`); 
+    return this.http.delete<void>(`${this.backendUrl}/api/Content/contentDelete/${id}`).pipe(
+      tap(() => {
+        console.log(`ApiService: deletePicture HTTP call successful for ID: ${id}. Emitting contentAddedSource.next()`); // DEBUG
+        this.contentAddedSource.next();
+      })
+    );
+  }
+
+  notifyContentAdded(){
+    this.contentAddedSource.next();
   }
 }
