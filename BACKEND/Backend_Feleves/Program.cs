@@ -46,6 +46,7 @@ namespace Backend_Feleves
             builder.Services.AddTransient<CourseLogic>();
             builder.Services.AddTransient<ContentLogic>();
             builder.Services.AddTransient<VideoLogic>();
+            builder.Services.AddTransient<DimensionsLogic>();
 
             builder.Services.AddIdentity<User, IdentityRole>(
                 option =>
