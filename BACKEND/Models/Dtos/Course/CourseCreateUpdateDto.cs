@@ -1,4 +1,3 @@
-// CourseCreateUpdateDto.cs
 using System.ComponentModel.DataAnnotations;
 
 namespace Models.Dtos.Course
@@ -7,6 +6,10 @@ namespace Models.Dtos.Course
     {
         [Required]
         public string Title { get; set; } = string.Empty;
+        [Required]
+        public int Width { get; set; } = 0;
+        [Required]
+        public int Height { get; set; } = 0;
 
         [Required]
         public string Body { get; set; } = string.Empty;
