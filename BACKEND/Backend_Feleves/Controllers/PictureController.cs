@@ -17,11 +17,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
-        //[Authorize]
-        public void AddPicture(PictureCreateUpdateDto dto)
+        [HttpPost("/addpicture")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddPicture( [FromForm] PictureCreateUpdateDto dto, [FromForm] IFormFile uploadedFile)
         {
-            logic.AddPicture(dto);
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = $"assets/UploadedPictures/{fileName}";
+            }
+
+            await logic.AddPicture(dto);
+
+            return Ok();
         }
 
         [HttpGet]

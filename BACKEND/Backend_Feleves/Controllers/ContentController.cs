@@ -33,8 +33,8 @@ namespace Backend_Feleves.Endpoint.Controllers
             return logic.GetAllContent();
         }
 
-        [HttpDelete("api/contentdelete/{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpDelete("contentdelete/{id}")]
+        //[Authorize(Roles = "Admin")]
         public void DeleteContent(string id)
         {
             logic.DeleteContent(id);

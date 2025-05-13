@@ -7,10 +7,8 @@ namespace Models.Dtos.Picture
     {
         [Required]
         public string Title { get; set; } = string.Empty;
-        public string filePath { get; set; } = "";
-        [Required]
+        public string FilePath { get; set; } = "";
         public int Width { get; set; } = 0;
-        [Required]
         public int Height { get; set; } = 0;
 
         [Required]
@@ -19,7 +17,6 @@ namespace Models.Dtos.Picture
         [Required]
         public string Category { get; set; } = string.Empty;
 
-        [Required]
         public string OwnerId { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace Models.Dtos.Content
     {
         public string Id { get; set; } = "";
         public string FilePath { get; set; } = "";
+        public string Body { get; set; } = "";
         public string Title { get; set; } = "";
         public string ApprovalRate { get; set; } = "";
         public UserShortViewDto Owner { get; set; } = new UserShortViewDto();
