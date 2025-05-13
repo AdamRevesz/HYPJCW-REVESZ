@@ -1,9 +1,10 @@
-
-
 <div class="container-fluid d-flex justify-content-center mt-5 align-items-center min-vh-100">
     <div class="card shadow-sm" style="width: 70rem; border-radius: 15px; border: 1px solid #dadce0">
         <div class="card-body p-4">
-  <h2 class="text-center p-2 sansation-regular" style="font-weight: bold; font-size: 35px; color: #5c2ca8;">Upload New Picture</h2>
+  <h2 class="text-center p-2 sansation-regular" style="font-weight: bold; font-size: 35px; color: #5c2ca8;">
+    Edit post:
+  </h2>
+  <h3 class="text-center p-2 sansation-regular" style="font-size: 30px; color:black;"> {{ contentItem?.title || 'Item' }}</h3>
   
   <form [formGroup]="pictureForm" (ngSubmit)="onSubmit()">
 
@@ -12,10 +13,16 @@
         class="upload-area p-4"
         [class.has-image]="imagePreview"
         (click)="fileInput.click()" 
-        style="border: 1px dashed grey; border-radius: 4px; text-align: center; cursor: pointer; background-color: #eddff4;">
+        style="border: 2px dashed grey; border-radius: 4px; text-align: center; cursor: pointer; background-color: #eddff4;">
         
-        <div *ngIf="!imagePreview" class="py-4 sansation-regular">
-          <p class="mt-2">Click to select an image</p>
+        <div *ngIf="!imagePreview && !isSubmitting" class="py-4 sansation-regular">
+          <p class="mt-2">Click to select a new image (optional)</p>
+        </div>
+        <div *ngIf="isSubmitting && !imagePreview" class="py-4 sansation-regular">
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading image...</span>
+            </div>
+            <p class="mt-2">Loading image...</p>
         </div>
         
         <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview" style="max-height: 300px; max-width: 100%;">
@@ -38,8 +45,8 @@
         id="title" 
         formControlName="title"
         [class.is-invalid]="pictureForm.get('title')?.invalid && pictureForm.get('title')?.touched">
-      <div class="invalid-feedback">
-        Please provide a title.
+      <div *ngIf="pictureForm.get('title')?.invalid && pictureForm.get('title')?.touched" class="invalid-feedback">
+        <div *ngIf="pictureForm.get('title')?.errors?.['required']">Please provide a title.</div>
       </div>
     </div>
     
@@ -52,25 +59,24 @@
         rows="3" 
         formControlName="body"
         [class.is-invalid]="pictureForm.get('body')?.invalid && pictureForm.get('body')?.touched"></textarea>
-      <div class="invalid-feedback">
-        Please provide a description.
+      <div *ngIf="pictureForm.get('body')?.invalid && pictureForm.get('body')?.touched" class="invalid-feedback">
+        <div *ngIf="pictureForm.get('body')?.errors?.['required']">Please provide a description.</div>
       </div>
     </div>
     
     <div class="mb-3">
-            <label for="category" class="form-label sansation-regular">Category</label>
+      <label for="category" class="form-label sansation-regular">Category*</label>
       <input 
         type="text" 
         class="form-control" 
         style="background-color:#eddff4; border: 1px solid gray;"
-        id="title" 
+        id="category"
         formControlName="category"
         [class.is-invalid]="pictureForm.get('category')?.invalid && pictureForm.get('category')?.touched">
-      <div class="invalid-feedback">
-        Please provide a category or more
+      <div *ngIf="pictureForm.get('category')?.invalid && pictureForm.get('category')?.touched" class="invalid-feedback">
+        <div *ngIf="pictureForm.get('category')?.errors?.['required']">Please provide a category.</div>
       </div>
     </div>
-
     
     <div *ngIf="uploadError" class="alert alert-danger mb-3">
       {{ uploadError }}
@@ -79,11 +85,11 @@
     <button 
       type="submit"
       class="btn btn-primary p-3 sansation-regular upload-button" 
-      [disabled]="isSubmitting">
+      [disabled]="isSubmitting || pictureForm.invalid">
       <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-      {{ isSubmitting ? 'Uploading...' : 'Upload Picture' }}
+      {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
     </button>
   </form>
-  </div>
-  </div>
-</div>
+        </div>
+    </div> 
+</div> 

@@ -30,7 +30,7 @@ export class ApiService {
   }
 
   getContentById(id: string): Observable<ContentShortViewDto>{
-    return this.http.get<ContentShortViewDto>(`${this.backendUrl}/getcontent/${id}`);
+    return this.http.get<ContentShortViewDto>(`${this.backendUrl}/api/Content/getcontent/${id}`);
   }
 
   addContent(contentData: ContentCreateDto): Observable<void>{
@@ -50,6 +50,15 @@ export class ApiService {
     return this.http.delete<void>(`${this.backendUrl}/api/Content/contentDelete/${id}`).pipe(
       tap(() => {
         console.log(`ApiService: deletePicture HTTP call successful for ID: ${id}. Emitting contentAddedSource.next()`); // DEBUG
+        this.contentAddedSource.next();
+      })
+    );
+  }
+
+  editPicture(id: string, pictureData: FormData): Observable<void>{
+    console.log(`ApiService: editPicture called for ID:${id}`);
+    return this.http.put<void>(`${this.backendUrl}/updatepicture/${id}`, pictureData).pipe(
+      tap(()=>{
         this.contentAddedSource.next();
       })
     );

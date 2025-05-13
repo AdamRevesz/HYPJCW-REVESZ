@@ -14,6 +14,7 @@ export interface ContentShortViewDto {
   width: 0;
   height: 0;
   title: string;
+  body: string;
   filePath: string;
   approvalRate: string;
   owner: UserShortViewDto;
@@ -23,6 +24,7 @@ export interface ContentShortViewDto {
 export interface CourseShortViewDto{
   id: string;
   title: string;
+  body: string;
   approvalRate: string;
   owner: UserShortViewDto;
   category: string;

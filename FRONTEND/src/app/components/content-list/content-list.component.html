@@ -26,13 +26,22 @@
                          [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
                          style="background-size: cover; background-position: center; min-height: 500px; color: white;">
                         
-                          <button 
-                            *ngIf="contentItem.id" 
-                            (click)="confirmDelete(contentItem.id, contentItem.title)" 
-                            class="btn btn-danger btn-m position-absolute bottom-0 end-0 m-2" 
-                            title="Delete {{contentItem.title}}">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                          <div class="position-absolute bottom-0 end-0 m-2 d-flex">
+                            <button 
+                                *ngIf="contentItem.id" 
+                                class="btn btn-light btn-sm me-1"
+                                [routerLink]="['/edit', contentItem.id]"
+                                title="Edit {{contentItem.title}}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button 
+                                *ngIf="contentItem.id" 
+                                (click)="confirmDelete(contentItem.id, contentItem.title)" 
+                                class="btn btn-danger btn-sm"
+                                title="Delete {{contentItem.title}}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
 
                         <div class="mt-auto">
                             <h5 class="card-title">{{ contentItem.title }}</h5>
