@@ -2,9 +2,13 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ContentListComponent } from './components/content-list/content-list.component';
+import { PictureUploadComponent } from './components/picture-upload/picture-upload.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent, title: 'Home' },
-  { path: 'login', component: LoginComponent, title: 'Login'},
-  { path: 'register', component: RegisterComponent, title: 'Register'},
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'list', component: ContentListComponent },
+  { path: 'upload', component: PictureUploadComponent },
 ];
