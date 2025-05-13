@@ -9,11 +9,6 @@ namespace Models
 {
     public class Picture : Content
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        [NotMapped]
-        public string Resolution => $"{Width}x{Height}";
-
         public Picture()
         {
 

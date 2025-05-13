@@ -8,24 +8,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
-
 namespace Logic
 {
     public class PictureLogic
     {
         IRepository<Picture> pictureRepo;
         DtoProvider dtoProvider;
+        DimensionsLogic dimensionsLogic;
 
-        public PictureLogic(IRepository<Picture> pictureRepo, DtoProvider dtoProvider)
+        public PictureLogic(IRepository<Picture> pictureRepo, DtoProvider dtoProvider, DimensionsLogic dimensionsLogic)
         {
             this.pictureRepo = pictureRepo;
             this.dtoProvider = dtoProvider;
+            this.dimensionsLogic = dimensionsLogic;
         }
 
-        public void AddPicture(PictureCreateUpdateDto dto)
+        public async Task AddPicture(PictureCreateUpdateDto dto)
         {
-            Picture picture = dtoProvider.Mapper.Map<Picture>(dto);
 
+            Picture picture = dtoProvider.Mapper.Map<Picture>(dto);
+            // Check the media dimensions
+            var result = dimensionsLogic.CheckDimensions(picture.FilePath);
+            // Change the Width and Height variable
+            if(result is null)
+            {
+                picture.Width = 0; picture.Height = 0;
+            }
+            else
+            {
+                picture.Width = result[0]; picture.Height = result[1];
+            }
             if (pictureRepo.ReadAll().FirstOrDefault(x => x.Title == picture.Title) == null)
             {
                 pictureRepo.Create(picture);
@@ -79,5 +91,6 @@ namespace Logic
             var picture = pictureRepo.Read(id);
             return dtoProvider.Mapper.Map<PictureViewDto>(picture);
         }
+
     }
 }

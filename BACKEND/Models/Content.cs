@@ -17,6 +17,8 @@ namespace Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string FilePath { get; set; } = "";
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
         [StringLength(50)]
         public string Title { get; set; } = "";
         public string Body { get; set; } = "";
