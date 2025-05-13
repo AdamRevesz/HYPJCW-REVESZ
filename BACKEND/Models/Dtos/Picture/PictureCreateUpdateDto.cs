@@ -8,6 +8,10 @@ namespace Models.Dtos.Picture
         [Required]
         public string Title { get; set; } = string.Empty;
         public string filePath { get; set; } = "";
+        [Required]
+        public int Width { get; set; } = 0;
+        [Required]
+        public int Height { get; set; } = 0;
 
         [Required]
         public string Body { get; set; } = string.Empty;
