@@ -5,8 +5,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { ContentListComponent } from './components/content-list/content-list.component';
 import { PictureUploadComponent } from './components/picture-upload/picture-upload.component';
 import { PictureCreateDto as PictureEditComponent } from './components/edit-item/edit-item.component';
-import { SalesItemCreateDto as SalesUploadComponent } from './components/sales-upload/sales-upload.component';
+import { SalesUploadComponent } from './components/sales-upload/sales-upload.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
+import { MarketplaceEditComponent } from './components/marketplace-edit/marketplace-edit.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: 'edit/:id', component: PictureEditComponent },
   { path: 'salesupload', component: SalesUploadComponent },
   { path: 'marketplace', component: MarketplaceComponent },
+  { path: 'editItem/:id', component: MarketplaceEditComponent}
 ];

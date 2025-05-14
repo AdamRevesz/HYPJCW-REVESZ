@@ -49,12 +49,12 @@ export interface VideoShortViewDto{
 export interface SalesItemShortViewDto{
   id: string;
   filePath: string;
+  body: string;
   title: string;
   price: number;
   approvalRate: string;
-  owner: UserShortViewDto;
-  category: string;
-  type: Enumerator;
+  type: string;
+  inStock: boolean;
 }
 
 //create interfaces
@@ -68,7 +68,6 @@ export interface ContentCreateDto{
 
 export interface PictureCreateDto{
 title: string;
-filePath: string;
 body: string;
 category: string;
 ownerId: string;
@@ -76,10 +75,8 @@ ownerId: string;
 
 export interface SalesItemCreateDto{
   title: string;
-  filePath: string;
   body: string;
-  category: string;
-  type: Enumerator;
+  type: string;
   price: number;
   inStock: boolean;
   number: number;

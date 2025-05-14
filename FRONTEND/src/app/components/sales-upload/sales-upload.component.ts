@@ -10,13 +10,13 @@ import {Router} from '@angular/router';
   selector: 'app-sales-upload',
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './sales-upload.component.html',
   styleUrl: './sales-upload.component.scss'
 })
-export class SalesItemCreateDto implements OnInit {
-  pictureForm!: FormGroup;
+export class SalesUploadComponent implements OnInit {
+  salesItemForm!: FormGroup;
   imagePreview: string | null = null;
   uploadError: string | null = null;
   selectedFile: File | null = null;
@@ -29,12 +29,12 @@ export class SalesItemCreateDto implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.pictureForm = this.fb.group({
+    this.salesItemForm = this.fb.group({
       title: ['', Validators.required],
       body: ['', Validators.required],
-      category: ['', Validators.required],
       price: ['', Validators.required],
-      ownerId: ['user123'] 
+      type: ['', Validators.required],
+      inStock: [true , Validators.required]
     });
   }
   
@@ -58,9 +58,9 @@ export class SalesItemCreateDto implements OnInit {
   }
   
   onSubmit(): void {
-    if (this.pictureForm.invalid || !this.selectedFile) {
-      Object.keys(this.pictureForm.controls).forEach(key => {
-        this.pictureForm.get(key)?.markAsTouched();
+    if (this.salesItemForm.invalid || !this.selectedFile) {
+      Object.keys(this.salesItemForm.controls).forEach(key => {
+        this.salesItemForm.get(key)?.markAsTouched();
       });
       
       if (!this.selectedFile) {
@@ -75,8 +75,8 @@ export class SalesItemCreateDto implements OnInit {
     const formData = new FormData();
     formData.append('uploadedFile', this.selectedFile);
     
-    Object.keys(this.pictureForm.value).forEach(key => {
-      formData.append(key, this.pictureForm.get(key)?.value);
+    Object.keys(this.salesItemForm.value).forEach(key => {
+      formData.append(key, this.salesItemForm.get(key)?.value);
     });
     
     this.apiService.addSalesItem(formData).subscribe({
@@ -84,7 +84,7 @@ export class SalesItemCreateDto implements OnInit {
         console.log('Sales Item added succesfully');
         this.resetForm();
         this.isSubmitting = false;
-        this.router.navigate(['/list']);
+        this.router.navigate(['/marketplace']);
       },
       error: (error: HttpErrorResponse) => {
         this.uploadError = `Failed to upload Item: ${error.message || 'Unknown error'}`;
@@ -94,7 +94,7 @@ export class SalesItemCreateDto implements OnInit {
   }
   
   resetForm(): void {
-    this.pictureForm.reset({
+    this.salesItemForm.reset({
       ownerId: 'user123'
     });
     this.imagePreview = null;

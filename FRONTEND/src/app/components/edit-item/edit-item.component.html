@@ -65,17 +65,13 @@
     </div>
     
     <div class="mb-3">
-      <label for="category" class="form-label sansation-regular">Category*</label>
+      <label for="category" class="form-label sansation-regular">Category</label>
       <input 
         type="text" 
         class="form-control" 
         style="background-color:#eddff4; border: 1px solid gray;"
         id="category"
-        formControlName="category"
-        [class.is-invalid]="pictureForm.get('category')?.invalid && pictureForm.get('category')?.touched">
-      <div *ngIf="pictureForm.get('category')?.invalid && pictureForm.get('category')?.touched" class="invalid-feedback">
-        <div *ngIf="pictureForm.get('category')?.errors?.['required']">Please provide a category.</div>
-      </div>
+        formControlName="category">
     </div>
     
     <div *ngIf="uploadError" class="alert alert-danger mb-3">
@@ -85,7 +81,8 @@
     <button 
       type="submit"
       class="btn btn-primary p-3 sansation-regular upload-button" 
-      [disabled]="isSubmitting || pictureForm.invalid">
+      [disabled]="isSubmitting || pictureForm.invalid"
+      routerLink="/list">
       <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
       {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
     </button>
