@@ -22,7 +22,7 @@ namespace Logic
             this.dtoProvider = dtoProvider;
         }
 
-        public void AddCourse(CourseCreateUpdateDto dto)
+        public async Task AddCourse(CourseCreateUpdateDto dto)
         {
             Course course = dtoProvider.Mapper.Map<Course>(dto);
 

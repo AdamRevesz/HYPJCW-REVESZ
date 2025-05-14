@@ -6,6 +6,7 @@ namespace Models.Dtos.Course
     public class CourseShortViewDto
     {
         public string Id { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string ApprovalRate { get; set; } = string.Empty;
         public UserShortViewDto Owner { get; set; } = new UserShortViewDto();

@@ -6,10 +6,7 @@ namespace Models.Dtos.Course
     {
         [Required]
         public string Title { get; set; } = string.Empty;
-        [Required]
-        public int Width { get; set; } = 0;
-        [Required]
-        public int Height { get; set; } = 0;
+        public string FilePath { get; set; } = string.Empty;
 
         [Required]
         public string Body { get; set; } = string.Empty;

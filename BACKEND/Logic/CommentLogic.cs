@@ -24,11 +24,10 @@ namespace Logic
             this.dtoProvider = dtoProvider;
         }
 
-        public void AddComment(string contentId, string userId, CommentCreateUpdateDto dto)
+        public void AddComment(string contentId, CommentCreateUpdateDto dto)
         {
             Comments comment = dtoProvider.Mapper.Map<Comments>(dto);
             comment.ContentId = contentId;
-            comment.PosterId = userId;
             commentRepo.Create(comment);
         }
 

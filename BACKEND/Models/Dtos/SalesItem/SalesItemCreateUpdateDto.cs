@@ -7,27 +7,21 @@ namespace Models.Dtos.SalesItem
     {
         [Required]
         public string Title { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
 
         [Required]
         public string Body { get; set; } = string.Empty;
 
         [Required]
-        public string Category { get; set; } = string.Empty;
-
-        [Required]
-        public TypeOfItem Type { get; set; }
+        public string Type { get; set; }
 
         [Required]
         public int Price { get; set; }
 
-        [Required]
         public bool InStock { get; set; }
 
-        [Required]
         public int Number { get; set; }
 
-        [Required]
-        public string OwnerId { get; set; }
     }
 }
 

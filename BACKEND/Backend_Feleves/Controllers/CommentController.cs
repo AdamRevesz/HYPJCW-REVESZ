@@ -26,7 +26,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             _dtoProvider = dtoProvider;
         }
 
-        [HttpPost("/api/addcomment")]
+        [HttpPost("/api/addcomment/{id}")]
         [Authorize]
         public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
         {

@@ -68,21 +68,35 @@ namespace Backend_Feleves.Endpoint.Controllers
                 return Forbid();
             }
         }
-
         [HttpPut("/updatepicture/{id}")]
-        //[Authorize]
-        public IActionResult UpdatePicture(string id, [FromBody] PictureCreateUpdateDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdatePicture(string id, [FromForm] PictureCreateUpdateDto dto, [FromForm] IFormFile? uploadedFile)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
+
+            if (uploadedFile != null && uploadedFile.Length > 0)
             {
-                logic.UpdatePicture(id, dto, userId);
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = Path.Combine("images", fileName);
+            }
+            else
+            {
+                var existing = logic.GetPictureEntity(id);
+                if (existing != null)
+                {
+                    dto.FilePath = existing.FilePath;
+                }
+            }
+                logic.UpdatePicture(id, dto);
                 return Ok();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Forbid();
-            }
+            
         }
 
         [HttpPut("/updatepictureadmin/{id}")]

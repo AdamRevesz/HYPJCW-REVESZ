@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Dtos.SalesItem;
 using Logic;
 using System.Security.Claims;
+using Models.Dtos.Course;
+using Models.Dtos.Picture;
 
 namespace Backend_Feleves.Endpoint.Controllers
 {
@@ -17,11 +19,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
-        [Authorize]
-        public void AddSalesItem(SalesItemCreateUpdateDto dto)
+        [HttpPost("addsalesitem")]
+        //[Authorize]
+        public async Task<IActionResult> AddSalesItem([FromForm] SalesItemCreateUpdateDto dto, [FromForm] IFormFile uploadedFile)
         {
-            logic.AddSalesItem(dto);
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = $"assets/UploadedPictures/{fileName}";
+            }
+
+            await logic.AddSalesItem(dto);
+
+            return Ok();
         }
 
         [HttpGet]
@@ -54,19 +72,34 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpPut("/updatesalesitem/{id}")]
-        [Authorize]
-        public IActionResult UpdateSalesItem(string id, [FromBody] SalesItemCreateUpdateDto dto)
+        //[Authorize]
+        public async Task<IActionResult> UpdateSalesItem(string id, [FromForm] SalesItemCreateUpdateDto dto, [FromForm] IFormFile? uploadedFile)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
+
+            if (uploadedFile != null && uploadedFile.Length > 0)
             {
-                logic.UpdateSalesItem(id, dto, userId);
-                return Ok();
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = Path.Combine("images", fileName);
             }
-            catch (UnauthorizedAccessException)
+            else
             {
-                return Forbid();
+                var existing = logic.GetPictureEntity(id);
+                if (existing != null)
+                {
+                    dto.FilePath = existing.FilePath;
+                }
             }
+            logic.UpdateSalesItem(id, dto);
+            return Ok();
+
         }
 
         [HttpGet("/getsalesitem/{id}")]

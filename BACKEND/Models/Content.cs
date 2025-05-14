@@ -24,7 +24,7 @@ namespace Models
         public string Body { get; set; } = "";
         public string OwnerId { get; set; } = ""; // Foreign key to User
         public virtual User Owner { get; set; } = new User();
-        public DateOnly CreateDate { get; set; }
+        public DateOnly CreateDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public int NumberOfLikes { get; set; }
         public int NumberOfDislikes { get; set; }
         [NotMapped]

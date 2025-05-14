@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
+using Data.ClassRepo;
 
 namespace Logic
 {
@@ -22,7 +23,12 @@ namespace Logic
             this.dtoProvider = dtoProvider;
         }
 
-        public void AddSalesItem(SalesItemCreateUpdateDto dto)
+        public SalesItem GetPictureEntity(string id)
+        {
+            return salesItemRepo.Read(id);
+        }
+
+        public async Task AddSalesItem(SalesItemCreateUpdateDto dto)
         {
             SalesItem salesItem = dtoProvider.Mapper.Map<SalesItem>(dto);
 
@@ -56,13 +62,9 @@ namespace Logic
             salesItemRepo.Remove(id);
         }
 
-        public void UpdateSalesItem(string id, SalesItemCreateUpdateDto dto, string userId)
+        public void UpdateSalesItem(string id, SalesItemCreateUpdateDto dto)
         {
             var oldSalesItem = salesItemRepo.Read(id);
-            if (oldSalesItem.OwnerId != userId)
-            {
-                throw new UnauthorizedAccessException("You are not the owner of this sales item.");
-            }
             dtoProvider.Mapper.Map(dto, oldSalesItem);
             salesItemRepo.Update(oldSalesItem);
         }

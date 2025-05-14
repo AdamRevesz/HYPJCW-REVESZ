@@ -22,6 +22,11 @@ namespace Logic
 
         }
 
+        public Picture GetPictureEntity(string id)
+        {
+            return pictureRepo.Read(id);
+        }
+
         public async Task AddPicture(PictureCreateUpdateDto dto)
         {
 
@@ -56,13 +61,9 @@ namespace Logic
             pictureRepo.Remove(id);
         }
 
-        public void UpdatePicture(string id, PictureCreateUpdateDto dto, string userId)
+        public void UpdatePicture(string id, PictureCreateUpdateDto dto)
         {
             var oldPicture = pictureRepo.Read(id);
-            if (oldPicture.OwnerId != userId)
-            {
-                throw new UnauthorizedAccessException("You are not the owner of this picture.");
-            }
             dtoProvider.Mapper.Map(dto, oldPicture);
             pictureRepo.Update(oldPicture);
         }

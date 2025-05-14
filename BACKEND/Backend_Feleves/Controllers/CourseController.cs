@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Dtos.Course;
 using Logic;
 using System.Security.Claims;
+using Models.Dtos.Picture;
 
 namespace Backend_Feleves.Endpoint.Controllers
 {
@@ -17,11 +18,27 @@ namespace Backend_Feleves.Endpoint.Controllers
             this.logic = logic;
         }
 
-        [HttpPost]
+        [HttpPost("addcourse")]
         //[Authorize]
-        public void AddCourse(CourseCreateUpdateDto dto)
+        public async Task<IActionResult> AddCourse([FromForm] CourseCreateUpdateDto dto, [FromForm] IFormFile uploadedFile)
         {
-            logic.AddCourse(dto);
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = $"assets/UploadedPictures/{fileName}";
+            }
+
+            await logic.AddCourse(dto);
+
+            return Ok();
         }
 
         [HttpGet]
