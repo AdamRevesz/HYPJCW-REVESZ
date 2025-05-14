@@ -33,7 +33,7 @@ export class SalesItemCreateDto implements OnInit {
       title: ['', Validators.required],
       body: ['', Validators.required],
       category: ['', Validators.required],
-      tags: [''],
+      price: ['', Validators.required],
       ownerId: ['user123'] 
     });
   }

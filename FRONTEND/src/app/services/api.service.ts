@@ -39,6 +39,10 @@ export class ApiService {
     return this.http.post<void>(`${this.backendUrl}/api/Content`, contentData);
   }
 
+  deleteContent(id: string): Observable<void>{
+    return this.http.delete<void>(`${this.backendUrl}/api/Content/contentdelete/${id}`);
+  }
+
   //picture api calls
   addPicture(pictureData: FormData): Observable<void> {
     return this.http.post<void>(`${this.backendUrl}/addpicture`, pictureData).pipe(
@@ -92,8 +96,20 @@ export class ApiService {
     );
   }
 
-  getSalesItems(): Observable<SalesItemShortViewDto>{
-    return this.http.get<SalesItemShortViewDto>(`${this.backendUrl}/api/SalesItem`);
+  getSalesItems(): Observable<SalesItemShortViewDto[]>{
+    return this.http.get<SalesItemShortViewDto[]>(`${this.backendUrl}/api/SalesItem`);
+  }
+
+  getSalesItemById(id: string): Observable<SalesItemShortViewDto>{
+    return this.http.get<SalesItemShortViewDto>(`${this.backendUrl}/getsalesitem/${id}`);
+  }
+
+  editSalesItem(id: string, salesItem: FormData): Observable<void>{
+    return this.http.put<void>(`${this.backendUrl}/updatesalesitem/${id}`,salesItem).pipe(
+      tap(()=>{
+        this.notifyContentAdded();
+      })
+    )
   }
 
 

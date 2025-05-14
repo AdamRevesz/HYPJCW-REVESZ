@@ -50,9 +50,11 @@ export interface SalesItemShortViewDto{
   id: string;
   filePath: string;
   title: string;
+  price: number;
   approvalRate: string;
   owner: UserShortViewDto;
   category: string;
+  type: Enumerator;
 }
 
 //create interfaces
@@ -78,9 +80,9 @@ export interface SalesItemCreateDto{
   body: string;
   category: string;
   type: Enumerator;
-  price: 0;
+  price: number;
   inStock: boolean;
-  number: 0;
+  number: number;
 }
 
 export interface CourseCreateDto{
@@ -88,6 +90,6 @@ export interface CourseCreateDto{
   filePath: string;
   body: string;
   category: string;
-  price: 0;
+  price: number;
   courseCategory: Enumerator;
 }

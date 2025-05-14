@@ -1,5 +1,5 @@
 
-
+<div class="container p-2"></div>
 <div class="container-fluid d-flex justify-content-center mt-5 align-items-center min-vh-100">
     <div class="card shadow-sm" style="width: 70rem; border-radius: 15px; border: 1px solid #dadce0">
         <div class="card-body p-4">
@@ -28,7 +28,7 @@
         style="display: none;"
         (change)="onFileSelected($event)">
     </div>
-    
+    <!--Title-->
     <div class="mb-3">
       <label for="title" class="form-label sansation-regular">Title*</label>
       <input 
@@ -42,7 +42,7 @@
         Please provide a title.
       </div>
     </div>
-    
+    <!--Description-->
     <div class="mb-3">
       <label for="body" class="form-label sansation-regular">Description*</label>
       <textarea 
@@ -56,7 +56,21 @@
         Please provide a description.
       </div>
     </div>
-    
+    <!--Price-->
+    <div class="mb-3">
+        <label for="price" class="form-label sansation-regular">Price*</label>
+        <input
+        type="text"
+        class="form-control"
+        style="background-color: #eddff4; border: 1px solid grey;"
+        id="price"
+        formControlName="price"
+        [class.is-invalid]="pictureForm.get('price')?.invalid && pictureForm.get('price')?.touched">
+        <div class="invalid-feedback">
+            Please provide a price
+        </div>
+    </div>
+    <!--Category-->
     <div class="mb-3">
             <label for="category" class="form-label sansation-regular">Category</label>
       <input 
@@ -70,7 +84,7 @@
         Please provide a category or more
       </div>
     </div>
-
+    <!--Item type-->
     <div class="mb-3">
         <label for="type" class="form-label sansation-regular">Item type</label>
         <select
@@ -98,10 +112,9 @@
     
     <button 
       type="submit"
-      class="btn btn-primary p-3 sansation-regular upload-button" 
-      [disabled]="isSubmitting">
+      class="btn btn-primary p-3 sansation-regular upload-button">
+      Upload Picture
       <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-      {{ isSubmitting ? 'Uploading...' : 'Upload Picture' }}
     </button>
   </form>
   </div>
