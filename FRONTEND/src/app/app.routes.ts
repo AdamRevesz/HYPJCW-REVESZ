@@ -5,6 +5,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ContentListComponent } from './components/content-list/content-list.component';
 import { PictureUploadComponent } from './components/picture-upload/picture-upload.component';
 import { PictureCreateDto as PictureEditComponent } from './components/edit-item/edit-item.component';
+import { SalesItemCreateDto as SalesUploadComponent } from './components/sales-upload/sales-upload.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -13,4 +14,5 @@ export const routes: Routes = [
   { path: 'list', component: ContentListComponent },
   { path: 'upload', component: PictureUploadComponent },
   { path: 'edit/:id', component: PictureEditComponent },
+  { path: 'salesupload', component: SalesUploadComponent },
 ];
