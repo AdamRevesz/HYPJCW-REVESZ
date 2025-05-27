@@ -21,7 +21,8 @@
         
         <div *ngFor="let contentItem of contents" class="col">
             <div class="container p-4"></div>
-            <div class="card d-flex shadow-sm rounded">
+            <div class="card d-flex shadow-sm rounded"
+            [routerLink]="['/inspectItem', contentItem.id]">
                 <div class="card-body d-flex flex-column rounded"
                          [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
                          style="background-size: cover; background-position: center; min-height: 500px; color: white;">
@@ -31,12 +32,13 @@
                                 *ngIf="contentItem.id" 
                                 class="btn btn-light btn-sm me-1"
                                 [routerLink]="['/edit', contentItem.id]"
+                                (click)="$event.stopPropagation()" 
                                 title="Edit {{contentItem.title}}">
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <button 
                                 *ngIf="contentItem.id" 
-                                (click)="confirmDelete(contentItem.id, contentItem.title)" 
+                                (click)="confirmDelete(contentItem.id, contentItem.title); $event.stopPropagation()" 
                                 class="btn btn-danger btn-sm"
                                 title="Delete {{contentItem.title}}">
                                 <i class="bi bi-trash"></i>
@@ -56,3 +58,4 @@
             </div>
         </div>
     </div>
+</div>

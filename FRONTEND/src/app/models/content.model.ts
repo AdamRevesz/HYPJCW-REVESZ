@@ -4,21 +4,39 @@ export interface UserShortViewDto{
 }
 
 export interface CommentViewDto{
-  username: UserShortViewDto;
   id: string;
+  body: string;
+  username: string;
+  likes?: number;
+  createdAt: string;
+}
+
+export interface CommentCreateDto{
   body: string;
 }
 
 export interface ContentShortViewDto {
   id: string;
-  width: 0;
-  height: 0;
   title: string;
   body: string;
   filePath: string;
   approvalRate: string;
   owner: UserShortViewDto;
   category: string;
+}
+
+export interface ContentViewDto{
+id: string;
+CreatedAt: Date;
+filePath: string;
+title: string;
+body: string;
+price: number;
+likes: number;
+approvalRate: string;
+dislikes: number;
+category: string;
+owner: UserShortViewDto;
 }
 
 export interface CourseShortViewDto{

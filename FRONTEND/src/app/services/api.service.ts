@@ -11,6 +11,8 @@ import {
   CommentViewDto,
   ContentCreateDto,
   PictureCreateDto,
+  CommentCreateDto,
+  ContentViewDto
 } from '../models/content.model'
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { Form } from '@angular/forms';
@@ -27,12 +29,24 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getComment(id: string): Observable<CommentViewDto[]>{
+    return this.http.get<CommentViewDto[]>(`${this.backendUrl}/api/${id}`)
+  }
+
+  addCommentToContent(contentId: string, commentData: CommentCreateDto): Observable<void> {
+  return this.http.post<void>(`${this.backendUrl}/api/addcomment?contentId=${contentId}`, commentData);
+}
+
+deleteComment(commentId: string): Observable<void> {
+  return this.http.delete<void>(`${this.backendUrl}/api/deletecomment/${commentId}`);
+}
+
   getContent(): Observable<ContentShortViewDto[]>{
     return this.http.get<ContentShortViewDto[]>(`${this.backendUrl}/api/Content`);
   }
 
-  getContentById(id: string): Observable<ContentShortViewDto>{
-    return this.http.get<ContentShortViewDto>(`${this.backendUrl}/api/Content/getcontent/${id}`);
+  getContentById(id: string): Observable<ContentViewDto>{
+    return this.http.get<ContentViewDto>(`${this.backendUrl}/api/Content/getcontent/${id}`);
   }
 
   addContent(contentData: ContentCreateDto): Observable<void>{
@@ -111,6 +125,8 @@ export class ApiService {
       })
     )
   }
+
+  
 
 
 }

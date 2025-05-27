@@ -8,6 +8,7 @@ import { PictureCreateDto as PictureEditComponent } from './components/edit-item
 import { SalesUploadComponent } from './components/sales-upload/sales-upload.component';
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { MarketplaceEditComponent } from './components/marketplace-edit/marketplace-edit.component';
+import { InspectItemComponent } from './components/inspect-item/inspect-item.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'edit/:id', component: PictureEditComponent },
   { path: 'salesupload', component: SalesUploadComponent },
   { path: 'marketplace', component: MarketplaceComponent },
-  { path: 'editItem/:id', component: MarketplaceEditComponent}
+  { path: 'editItem/:id', component: MarketplaceEditComponent },
+  { path: 'inspectItem/:id', component: InspectItemComponent }
 ];

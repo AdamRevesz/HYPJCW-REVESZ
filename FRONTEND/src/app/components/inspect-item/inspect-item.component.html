@@ -1,0 +1,127 @@
+<div class="container p-4"></div>
+<div class="container mt-4">
+    <div *ngIf="isLoading" class="text-center my-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading content...</p>
+    </div>
+
+    <div *ngIf="error && !isLoading" class="alert alert-danger">
+        {{ error }}
+        <div *ngIf="!content">
+            <button routerLink="/list" class="btn btn-link">Go back</button>
+        </div>
+    </div>
+    <!--Display the media-->
+    <div *ngIf="content && !isLoading" class="row">
+        <div class="col-md-8">
+            <div class="mb-4" *ngIf="content.filePath">
+                <img [src]="content.filePath" [alt]="content.title" class="img-fluid rounded shadow-sm"
+                    style="height: auto; width: 100%;">
+            </div>
+            <!--Display title and description-->
+            <div class="card shadow-sm p-3">
+                <div class="card-body d-flex flex-column">
+                    <h1 class="mb-3 sansation-regular" style="font-weight: bold; font-size: 35px;">{{ content.title }}
+                    </h1>
+                    <p class="lead sansation-regular" style="font-size: 15px;">{{ content.body }}</p>
+
+                    <!--Like, dislike button-->
+                    <div class="mt-auto d-flex justify-content-end">
+                        <div class="btn-group" role="group">
+                            <button (click)="likeContent()" class="btn btn-outline-success upload-button"
+                                style="background-color: white; color: #5c2ca8; border: solid 1px #5c2ca8 ">
+                                Like <span>({{ content.likes }})</span>
+                            </button>
+                            <button (click)="dislikeContent()" class="btn"
+                                style="color: #5c2ca8; border: solid 1px #5c2ca8 ">
+                                Dislike <span *ngIf="content.dislikes !== undefined">({{ content.dislikes }})</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--If item is a salesItem or Course, add to basket button-->
+            <div *ngIf="content.price !== undefined && content.price !== null" class="mb-4 p-3 bg-light rounded">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="text-success mb-1">{{ content.price | currency }}</h4>
+                    </div>
+                    <button (click)="addToBasket()" class="btn btn-primary">
+                        Add to Basket
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--Display comments-->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Comments ({{ comments.length }})</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="commentForm" (ngSubmit)="submitComment()" class="mb-4">
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label sansation-regular">Write a comment</label>
+                            <textarea formControlName="commentText" class="form-control" rows="3"
+                                placeholder="Write your comment..." id="commentText"
+                                style="background-color: #eddff4; border: 1px solid grey"
+                                [class.is-invalid]="commentForm.get('commentText')?.invalid && commentForm.get('commentText')?.touched">
+                            </textarea>
+                            <div *ngIf="commentForm.get('commentText')?.errors?.['required'] && commentForm.get('commentText')?.touched"
+                                class="invalid-feedback">
+                                Please write a comment first.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary p-3 sansation-regular upload-button"
+                            [disabled]="commentForm.invalid || isSubmittingComment">
+                            <span *ngIf="isSubmittingComment" class="spinner-border spinner-border-sm me-1"
+                                role="status" aria-hidden="true"></span>
+                            {{ isSubmittingComment ? 'Adding...' : 'Add comment' }}
+                        </button>
+                    </form>
+
+                    <div *ngIf="comments.length > 0" class="comments-list" style="max-height: 400px; overflow-y: auto;">
+                        <div *ngFor="let comment of comments" class="mb-3 p-2 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <small class="text-muted">
+                                        <strong>{{ comment.username || 'Anonymous' }}</strong>
+                                        <span *ngIf="comment.createdAt"> • {{ comment.createdAt | date:'short' }}</span>
+                                    </small>
+                                    <p class="mb-1 mt-1">{{ comment.body }}</p>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    [disabled]="deletingCommentId === comment.id">
+                                    <span *ngIf="deletingCommentId === comment.id"
+                                        class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    <i *ngIf="deletingCommentId !== comment.id" class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="deleteCommentError && deletingCommentId === comment.id"
+                                class="alert alert-danger alert-sm mt-2">
+                                {{ deleteCommentError }}
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="comments.length === 0 && !isLoading" class="text-center text-muted">
+                        <p>No comments yet. Be the first to comment!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Back button-->
+    <div class="mt-4 mb-4" *ngIf="!isLoading">
+        <button routerLink="/list" class="btn btn-secondary">
+            Back
+        </button>
+    </div>
+</div>
