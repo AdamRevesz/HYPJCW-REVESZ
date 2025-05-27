@@ -28,6 +28,7 @@ namespace Logic
         {
             Comments comment = dtoProvider.Mapper.Map<Comments>(dto);
             comment.ContentId = contentId;
+            comment.PosterId = "2811c75d-ae64-44f4-90f7-32aa02bd2202";
             commentRepo.Create(comment);
         }
 
@@ -41,18 +42,10 @@ namespace Logic
             return await dtoProvider.MapCommentsToDtosAsync(comments);
         }
 
-        public void DeleteComment(string id, string userId)
+        public void DeleteComment(string id)
         {
             var comment = commentRepo.Read(id);
-            if(comment.PosterId == userId)
-            {
-                commentRepo.Remove(id);
-            }
-            else if (comment.Contents.OwnerId == userId)
-            {
-                commentRepo.Remove(id);
-            }
-            throw new ArgumentException("Unauthorized access");
+            commentRepo.Remove(id);           
         }
 
         public void UpdateComment(string id,string userId, CommentCreateUpdateDto dto)

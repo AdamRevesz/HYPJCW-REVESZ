@@ -26,17 +26,10 @@ namespace Backend_Feleves.Endpoint.Controllers
             _dtoProvider = dtoProvider;
         }
 
-        [HttpPost("/api/addcomment/{id}")]
-        [Authorize]
-        public IActionResult AddComment(string contentId, CommentCreateUpdateDto dto)
+        [HttpPost("/api/addcomment/")]
+        public IActionResult AddComment([FromQuery]string contentId, CommentCreateUpdateDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User is not logged in.");
-            }
-
-            _logic.AddComment(contentId, userId, dto);
+            _logic.AddComment(contentId,dto);
             return Ok("Comment added successfully.");
         }
 
@@ -47,23 +40,15 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpDelete("/api/deletecomment/{id}")]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public IActionResult DeleteComment(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
-            {
-                _logic.DeleteComment(id, userId);
+                _logic.DeleteComment(id);
                 return Ok();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Forbid();
-            }
         }
 
         [HttpPut("/api/updatecomment/{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult UpdateComment(string id, [FromBody] CommentCreateUpdateDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -22,9 +22,10 @@ namespace Models
         [StringLength(50)]
         public string Title { get; set; } = "";
         public string Body { get; set; } = "";
+        public int Price { get; set; } = 0;
         public string OwnerId { get; set; } = ""; // Foreign key to User
         public virtual User Owner { get; set; } = new User();
-        public DateOnly CreateDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public int NumberOfLikes { get; set; }
         public int NumberOfDislikes { get; set; }
         [NotMapped]
@@ -33,14 +34,13 @@ namespace Models
         public string Tags { get; set; } = "";
 
 
-        public Content(string contentId, string title, string body, string ownerId, User owner, DateOnly createDate, int numberOfLikes, List<Comments> comments, string tags)
+        public Content(string contentId, string title, string body, string ownerId, User owner, int numberOfLikes, List<Comments> comments, string tags)
         {
             Id = Guid.NewGuid().ToString();
             Title = title;
             Body = body;
             OwnerId = ownerId;
             Owner = owner;
-            CreateDate = createDate;
             Tags = tags;
             Comments = new List<Comments>();
         }
