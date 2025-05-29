@@ -12,7 +12,8 @@ import {
   ContentCreateDto,
   PictureCreateDto,
   CommentCreateDto,
-  ContentViewDto
+  ContentViewDto,
+  UserViewDto
 } from '../models/content.model'
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { Form } from '@angular/forms';
@@ -120,6 +121,27 @@ deleteComment(commentId: string): Observable<void> {
 
   editSalesItem(id: string, salesItem: FormData): Observable<void>{
     return this.http.put<void>(`${this.backendUrl}/updatesalesitem/${id}`,salesItem).pipe(
+      tap(()=>{
+        this.notifyContentAdded();
+      })
+    )
+  }
+
+  //User Api call
+  getUser(id: string): Observable<UserViewDto>{
+    return this.http.get<UserViewDto>(`${this.backendUrl}/api/User/getuser${id}`)
+  }
+
+  updateUserPicture(id: string, userData: FormData): Observable<void>{
+    return this.http.put<void>(`${this.backendUrl}/api/User/uploadpicture/${id}`,userData).pipe(
+      tap(()=>{
+        this.notifyContentAdded();
+      })
+    )
+  }
+
+  updateUser(id: string, userData: FormData): Observable<void>{
+    return this.http.put<void>(`${this.backendUrl}/api/User/updateuser/${id}`,userData).pipe(
       tap(()=>{
         this.notifyContentAdded();
       })

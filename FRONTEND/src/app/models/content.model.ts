@@ -3,6 +3,12 @@ export interface UserShortViewDto{
   isProfessional: boolean;
 }
 
+export interface UserViewDto{
+  username: string;
+  email: string;
+  professional: string;
+}
+
 export interface CommentViewDto{
   id: string;
   body: string;
@@ -107,4 +113,14 @@ export interface CourseCreateDto{
   category: string;
   price: number;
   courseCategory: Enumerator;
+}
+
+//User Dtos
+export interface UserCreateUpdateDto {
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+  filePath: string;
+  Professional: boolean;
 }
