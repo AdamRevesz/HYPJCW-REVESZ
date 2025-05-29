@@ -9,6 +9,7 @@ import { SalesUploadComponent } from './components/sales-upload/sales-upload.com
 import { MarketplaceComponent } from './components/marketplace/marketplace.component';
 import { MarketplaceEditComponent } from './components/marketplace-edit/marketplace-edit.component';
 import { InspectItemComponent } from './components/inspect-item/inspect-item.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'salesupload', component: SalesUploadComponent },
   { path: 'marketplace', component: MarketplaceComponent },
   { path: 'editItem/:id', component: MarketplaceEditComponent },
-  { path: 'inspectItem/:id', component: InspectItemComponent }
+  { path: 'inspectItem/:id', component: InspectItemComponent },
+  { path: 'profile', component: UserProfileComponent}
 ];
