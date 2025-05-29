@@ -128,6 +128,9 @@ namespace Logic.Helper
                 cfg.CreateMap<SalesItem, SalesItemViewDto>();
                 cfg.CreateMap<SalesItemCreateUpdateDto, SalesItem>();
                 cfg.CreateMap<CommentCreateUpdateDto, Comments>();
+                cfg.CreateMap<User, UserViewDto>();
+                cfg.CreateMap<UserUpdateDto, User>();
+                cfg.CreateMap<UserUpdatePictureDto, User>();
                 cfg.CreateMap<Comments, CommentViewDto>()
             .ForMember(dest => dest.Username, opt => opt.Ignore());
             });

@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Models.Dtos.UserDto;
+using Logic;
 
 namespace Backend_Feleves.Endpoint.Controllers
 {
@@ -19,6 +20,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         UserManager<User> userManager;
         RoleManager<IdentityRole> roleManager;
         DtoProvider dtoProvider;
+        UserLogic logic;
 
         private readonly SignInManager<User> _signInManager;
    
@@ -56,6 +58,47 @@ namespace Backend_Feleves.Endpoint.Controllers
             if (user == null)
                 throw new ArgumentException("User not found");
             await userManager.RemoveFromRoleAsync(user, "Admin");
+        }
+        [HttpPut("uploadpicture/{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadPicture(string id, [FromForm] IFormFile? uploadedFile, UserUpdatePictureDto dto)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fullPath = Path.Combine(folderPath, fileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await uploadedFile.CopyToAsync(stream);
+
+                dto.FilePath = $"assets/UploadedPictures/{fileName}";
+            }
+
+            logic.UpdatePicture(id,dto);
+
+            return Ok();
+        }
+        [HttpPut("updateuser/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateDto dto)
+        {
+            if(id == null)
+            {
+                return BadRequest("User ID cannot be null");
+            }
+            logic.UpdateUser(id, dto);
+            return Ok();
+        }
+
+        [HttpGet("getuser{id}")]
+        public async Task<IEnumerable<UserViewDto>> GetUser(string id)
+        {
+            var user = userManager.Users.FirstOrDefault(u => u.Id == id);
+            return new List<UserViewDto> { dtoProvider.Mapper.Map<UserViewDto>(user) };
         }
 
         [HttpGet]
