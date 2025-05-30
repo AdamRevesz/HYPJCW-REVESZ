@@ -15,6 +15,7 @@ import { UserViewDto } from '../../models/content.model';
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })
+
 export class UserProfileComponent implements OnInit {
   userForm!: FormGroup;
   uploadError: string | null = null;
@@ -41,7 +42,6 @@ export class UserProfileComponent implements OnInit {
     this.loadUser();
   }
 
-
   loadUser(): void {
     this.apiService.getUser(this.userId).subscribe({
       next: (data) => {
@@ -61,5 +61,87 @@ export class UserProfileComponent implements OnInit {
         this.userLoadError = 'Failed to load user information';
       }
     })
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      if (!file.type.match(/image\/(jpeg|jpg|png|gif|webp)/)) {
+        this.uploadError = 'Please select a valid image file (JPEG, PNG, GIF, or WebP).';
+        return;
+      }
+
+      this.selectedFile = file;
+      this.uploadError = null;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }  onSubmit(): void {
+    this.isSubmiting = true;
+    this.uploadError = null;
+
+    const userForm = new FormData();
+    
+    const formData = this.userForm.value;
+    if (formData.username && formData.username.trim()) {
+      userForm.append('username', formData.username.trim());
+    }
+    if (formData.email && formData.email.trim()) {
+      userForm.append('email', formData.email.trim());
+    }
+    if (formData.password && formData.password.trim()) {
+      userForm.append('password', formData.password.trim());
+    }
+    userForm.append('isProfessional', formData.professional.toString());
+
+    this.apiService.updateUser(this.userId, userForm).subscribe({
+      next: () => {
+        console.log('User profile updated');
+        this.isSubmiting = false;
+        this.loadUser();
+        this.uploadError = 'Profile updated successfully!';
+        setTimeout(() => this.uploadError = null, 3000);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.uploadError = `Failed to update profile: ${error.message}`;
+        this.isSubmiting = false;
+      }
+    });
+  }
+
+  updateProfilePicture(): void {
+    if (!this.selectedFile) {
+      this.uploadError = 'Please select an image file first.';
+      return;
+    }
+
+    this.isSubmiting = true;
+    this.uploadError = null;
+
+    const pictureFormData = new FormData();
+    pictureFormData.append('uploadedFile', this.selectedFile);
+
+    this.apiService.updateUserPicture(this.userId, pictureFormData).subscribe({
+      next: () => {
+        console.log('Profile picture updated successfully');
+        this.resetForm();
+        this.isSubmiting = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        this.uploadError = `Failed to update profile picture: ${err.message}`;
+        this.isSubmiting = false;
+      }
+    });
+  }
+
+  resetForm(): void {
+    this.userForm.reset();
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.uploadError = null;
   }
 }
