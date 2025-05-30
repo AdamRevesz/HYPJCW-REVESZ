@@ -6,7 +6,9 @@ export interface UserShortViewDto{
 export interface UserViewDto{
   username: string;
   email: string;
-  professional: string;
+  isProfessional: boolean;
+  filePath: string;
+  isAdmin: boolean;
 }
 
 export interface CommentViewDto{
@@ -121,6 +123,5 @@ export interface UserCreateUpdateDto {
   username: string;
   password: string;
   email: string;
-  filePath: string;
-  Professional: boolean;
+  isProfessional: boolean;
 }

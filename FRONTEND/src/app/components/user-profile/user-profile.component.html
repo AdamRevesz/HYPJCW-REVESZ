@@ -1,54 +1,144 @@
-<div class="container p-3"></div>
-<div class="card p-2">
-    <div class="row w-100 text-center">
-        <div class="col-md-2 sansation-regular" style="font-weight: bold;">
-            <img [src]="profile.filepath" alt="{{ profile.name }}"
-            class="img-fluid rounded" style="max-width: 50px; max-height: 50px;">
-            <div *ngIf="!profile.filepath" class="text-muted small">No image</div>
+<div class="container-fluid d-flex justify-content-center align-items-start min-vh-100 py-4" style="margin-top: 56px;">
+    <div class="card p-4 mx-3" style="max-width: 900px; width: 100%;">
+        <div class="w-100 mb-4 mx-auto" *ngIf="user">
+            <div class="col-12">
+                <h4 class="sansation-regular mb-3 p-3" style="font-weight: bold; font-size: 25px;">Profile Information
+                </h4>
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <img [src]="user.filePath || 'assets/default-avatar.png'" alt="Profile Picture" class="rounded"
+                            style="width: 200px; height: 200px; background-size: cover; background-position: center;"
+                            onerror="this.src='assets/default-avatar.png'">
+                        <div *ngIf="!user.filePath" class="text-muted small mt-2">No profile picture</div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="sansation-regular"><strong>Username:</strong> {{ user.username }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="sansation-regular"><strong>Account Type:</strong>
+                                    <span class="badge bg-primary ms-2">{{ user.isProfessional ? 'isProfessional Artist' :
+                                        'Regular User' }}</span>
+                                </p>
+                                <p class="sansation-regular" *ngIf="user.isAdmin"><strong>Role:</strong>
+                                    <span class="badge bg-danger ms-2">Administrator</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row w-100">
-            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-                <div class="mb-4 p-2">
-                    <label for="text" class="form-label sansation-regular">Change username</label>
-                    <input
-                    class="form-control"
-                    style="background-color: #eddff4; border: 1px solid grey;"
-                    id="username"
-                    formControlName="username">
-                    <p class="text-muted sansation-regular" style="font-size: 10px;">Username needs to be atleast 8 characters</p>
+        <div *ngIf="userLoadError" class="alert alert-danger">
+            {{ userLoadError }}
+        </div>
+
+        <div *ngIf="!user && !userLoadError" class="text-center p-4">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading user information...</span>
+            </div>
+            <p class="mt-2 sansation-regular">Loading user information...</p>
+        </div>
+
+        <div class="row w-100" *ngIf="user">;
+            <div class="col-12">
+                <h4 class="sansation-regular mb-3">Update Profile Information</h4>
+                <!-- Form -->
+                 <!--Username-->
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="username" class="form-label sansation-regular">Username</label>
+                                <input class="form-control" style="background-color: #eddff4; border: 1px solid grey;"
+                                    id="username" formControlName="username"
+                                    placeholder="Leave empty to keep your current username">
+                                <div *ngIf="userForm.get('username')?.errors?.['required'] && userForm.get('username')?.touched"
+                                    class="invalid-feedback">
+                                    Username is required.
+                                </div>
+                                <p class="text-muted sansation-regular p-1" style="font-size: 15px;">Username needs to
+                                    be at least 8 characters</p>
+                            </div>
+                        </div>
+                        <!--Email address-->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label sansation-regular">Email address</label>
+                                <input type="email" class="form-control"
+                                    style="background-color: #eddff4; border: 1px solid grey;" id="email"
+                                    formControlName="email" placeholder="Leave empty to keep your current email">
+                                <div *ngIf="userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched"
+                                    class="invalid-feedback">
+                                    Email is required.
+                                </div>
+                                <div *ngIf="userForm.get('email')?.errors?.['email'] && userForm.get('email')?.touched"
+                                    class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Password-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="password" class="form-label sansation-regular">New Password</label>
+                                <input type="password" class="form-control"
+                                    style="background-color: #eddff4; border: 1px solid grey;" id="password"
+                                    formControlName="password" placeholder="Leave empty to keep current password">
+                                <div *ngIf="userForm.get('password')?.errors?.['required'] && userForm.get('password')?.touched"
+                                    class="invalid-feedback">
+                                    Password is required.
+                                </div>
+                            </div>
+                        </div>
+                        <!--Checkbox for professional artist-->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check mt-4">
+                                    <input type="checkbox" class="form-check-input" id="isProfessional"
+                                        formControlName="isProfessional">
+                                    <label for="isProfessional" class="form-check-label sansation-regular">isProfessional
+                                        artist account</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    <button type="submit" class="btn btn-primary p-3 sansation-regular upload-button me-2"
+                        [disabled]="isSubmiting">
+                        <span *ngIf="isSubmiting" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                        {{ isSubmiting ? 'Updating...' : 'Update Profile' }}
+                    </button>
+                </form>
+
+                <!-- Upload Picture-->
+                <div class="mt-4 p-1 border-top">
+                    <h5 class="sansation-regular">Profile Picture</h5>
+                    <div class="mb-3">
+                        <label for="profilePicture" class="form-label sansation-regular">Upload New Profile
+                            Picture</label>
+                        <input type="file" class="form-control" id="profilePicture" accept="image/*"
+                            (change)="onFileSelected($event)">
+                    </div>
+                    <div *ngIf="imagePreview" class="mb-3">
+                        <p class="sansation-regular">Preview:</p>
+                        <img [src]="imagePreview" alt="Preview" class="img-thumbnail"
+                            style="max-width: 200px; max-height: 200px;">
+                    </div>
+                    <button type="button" class="btn btn-secondary p-3 sansation-regular upload-button"
+                        [disabled]="!selectedFile || isSubmiting" (click)="updateProfilePicture()">
+                        <span *ngIf="isSubmiting" class="spinner-border spinner-border-sm me-1" role="status"
+                            aria-hidden="true"></span>
+                        {{ isSubmiting ? 'Uploading...' : 'Update Picture Only' }}
+                    </button>
                 </div>
-                <div class="mb-4 p-2">
-                    <label for="emailAdress" class="form-label sansation-regular">Email address</label>
-                    <input
-                    type="text"
-                    class="form-control"
-                    style="background-color: #eddff4; border: 1px solid grey;"
-                    id="emailAdress"
-                    formControlName="emailAdress">
+
+                <!-- Error Messages -->
+                <div *ngIf="uploadError" class="alert alert-danger mt-3">
+                    {{ uploadError }}
                 </div>
-                <div class="mb-4 p-2">
-                    <label for="password" class="form-label sansation-regular">password</label>
-                    <input
-                    type="text"
-                    class="form-control"
-                    style="background-color: #eddff4; border: 1px solid grey;"
-                    id="password"
-                    formControlName="password">
-                </div>
-                <div class="mb-4 p-2">
-                    <label for="proffessional" class="form-label sansation-regular">Professional artist?</label>
-                    <input
-                    type="checkbox"
-                    class="form-control"
-                    id="proffessional"
-                    formControlName="proffessional">
-                </div>
-                <button
-                type="submit"
-                class="btn btn-primary p-3 sansation-regular upload-button"
-                [disabled]="isSubmitting">
-            </button>
-            </form>
+            </div>
         </div>
     </div>
 </div>

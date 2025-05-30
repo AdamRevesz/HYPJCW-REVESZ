@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, Subject, tap, map } from 'rxjs';
 import {
   UserShortViewDto,
   ContentShortViewDto,
@@ -129,7 +129,10 @@ deleteComment(commentId: string): Observable<void> {
 
   //User Api call
   getUser(id: string): Observable<UserViewDto>{
-    return this.http.get<UserViewDto>(`${this.backendUrl}/api/User/getuser${id}`)
+    return this.http.get<UserViewDto[]>(`${this.backendUrl}/api/User/getuser${id}`).pipe(
+      tap((users) => console.log('API Response:', users)),
+      map((users: UserViewDto[]) => users[0])
+    );
   }
 
   updateUserPicture(id: string, userData: FormData): Observable<void>{
