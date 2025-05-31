@@ -33,6 +33,18 @@ namespace Logic
         public void UpdateUser(string id, UserUpdateDto dto)
         {
             var oldUser = userRepo.Read(id);
+            if (string.IsNullOrWhiteSpace(dto.Username))
+            {
+                dto.Username = oldUser.UserName;
+            }
+            if (string.IsNullOrWhiteSpace(dto.EmailAddress))
+            {
+                dto.EmailAddress = oldUser.EmailAddress;
+            }
+            if (string.IsNullOrWhiteSpace(dto.Password))
+            {
+                dto.Password = oldUser.Password;
+            }
             dtoProvider.Mapper.Map(dto, oldUser);
             userRepo.Update(oldUser);
         }

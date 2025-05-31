@@ -8,9 +8,9 @@ namespace Models.Dtos.UserDto
 {
     public class UserUpdateDto
     {
-        public string Username { get; set; } = "";
-        public string EmailAddress { get; set; } = "";
-        public string Password { get; set; }
-        public bool isProfessional { get; set; }
+        public string? Username { get; set; }
+        public string? EmailAddress { get; set; }
+        public string? Password { get; set; }
+        public bool? isProfessional { get; set; }
     }
 }

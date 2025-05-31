@@ -24,12 +24,13 @@ namespace Backend_Feleves.Endpoint.Controllers
 
         private readonly SignInManager<User> _signInManager;
    
-  public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider, SignInManager<User> signInManager)
+  public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider, SignInManager<User> signInManager, UserLogic logic)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dtoProvider = dtoProvider;
             _signInManager = signInManager;
+            this.logic = logic;
 
             Task.Run(async () =>
             {
@@ -61,35 +62,42 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
         [HttpPut("uploadpicture/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadPicture(string id, [FromForm] IFormFile? uploadedFile, UserUpdatePictureDto dto)
+        public async Task<IActionResult> UploadPicture(string id, [FromForm] IFormFile? uploadedFile)
         {
+            if (uploadedFile == null || uploadedFile.Length == 0)
+            {
+                return BadRequest("No file uploaded");
+            }
+
             var user = await userManager.FindByIdAsync(id);
-
-            if (uploadedFile != null && uploadedFile.Length > 0)
+            if (user == null)
             {
-                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
-                Directory.CreateDirectory(folderPath);
-
-                var fileName = Path.GetFileName(uploadedFile.FileName);
-                var fullPath = Path.Combine(folderPath, fileName);
-
-                using var stream = new FileStream(fullPath, FileMode.Create);
-                await uploadedFile.CopyToAsync(stream);
-
-                dto.FilePath = $"assets/UploadedPictures/{fileName}";
+                return NotFound("User not found");
             }
 
-            logic.UpdatePicture(id,dto);
+            string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+            Directory.CreateDirectory(folderPath);
 
-            return Ok();
+            var fileName = Path.GetFileName(uploadedFile.FileName);
+            var fullPath = Path.Combine(folderPath, fileName);
+
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await uploadedFile.CopyToAsync(stream);
+
+            var dto = new UserUpdatePictureDto
+            {
+                FilePath = $"assets/UploadedPictures/{fileName}"
+            };
+
+            // Update the user's picture
+            logic.UpdatePicture(id, dto);
+
+            return Ok(new { filePath = dto.FilePath });
         }
+
         [HttpPut("updateuser/{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateDto dto)
+        public async Task<IActionResult> UpdateUser(string id, [FromForm] UserUpdateDto dto)
         {
-            if(id == null)
-            {
-                return BadRequest("User ID cannot be null");
-            }
             logic.UpdateUser(id, dto);
             return Ok();
         }
