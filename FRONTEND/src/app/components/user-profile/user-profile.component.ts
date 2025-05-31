@@ -49,9 +49,9 @@ export class UserProfileComponent implements OnInit {
         console.log('User is loaded', this.user);
         this.userForm.patchValue({
           username: this.user.username || '',
-          email: '',
+          emailAddress: '',
           password: '',
-          professional: this.user.isProfessional || false
+          isProfessional: this.user.isProfessional || false
         });
 
         this.userLoadError = null;
@@ -90,13 +90,13 @@ export class UserProfileComponent implements OnInit {
     if (formData.username && formData.username.trim()) {
       userForm.append('username', formData.username.trim());
     }
-    if (formData.email && formData.email.trim()) {
-      userForm.append('email', formData.email.trim());
+    if (formData.emailAddress && formData.emailAddress.trim()) {
+      userForm.append('email', formData.emailAddress.trim());
     }
     if (formData.password && formData.password.trim()) {
       userForm.append('password', formData.password.trim());
     }
-    userForm.append('isProfessional', formData.professional.toString());
+    userForm.append('isProfessional', formData.isProfessional.toString());
 
     this.apiService.updateUser(this.userId, userForm).subscribe({
       next: () => {
