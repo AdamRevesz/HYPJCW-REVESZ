@@ -17,11 +17,11 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpPost("{id}/like")]
-        public IActionResult Like(string id)
+        public IActionResult Like(string id, [FromQuery] string userId)
         {
             try
             {
-                rateLogic.Like(id);
+                rateLogic.Like(id, userId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -31,11 +31,11 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpPost("{id}/dislike")]
-        public IActionResult Dislike(string id)
+        public IActionResult Dislike(string id, [FromQuery] string userId)
         {
             try
             {
-                rateLogic.Dislike(id);
+                rateLogic.Dislike(id, userId);
                 return Ok();
             }
             catch (ArgumentException ex)

@@ -21,6 +21,8 @@ namespace Models
         public DateOnly AccountCreated { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public virtual List<Content> Contents { get; set; } = new List<Content>();
         public virtual List<Comments> Comments { get; set; } = new List<Comments>();
+        public virtual List<Content> LikedContents { get; set; } = new List<Content>();
+        public virtual List<Content> DislikedContents { get; set; } = new List<Content>();
 
         public User(string username, string emailAddress, string password, string firstName, string lastName) : base(username)
         {

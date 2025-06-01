@@ -38,6 +38,12 @@ namespace Data
                       .WithOne(c => c.Owner)
                       .HasForeignKey(c => c.PosterId)
                       .OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(u => u.LikedContents)
+                .WithMany(c => c.LikedByUsers)
+                        .UsingEntity(j => j.ToTable("UserLikedContents"));
+                entity.HasMany(u => u.DislikedContents)
+                .WithMany(c => c.DislikedByUsers)
+                        .UsingEntity(j => j.ToTable("UserDislikedContents"));
             });
 
             modelBuilder.Entity<Comments>(entity =>

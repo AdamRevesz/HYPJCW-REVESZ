@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250601125931_UserLikedContents")]
+    partial class UserLikedContents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,21 +41,6 @@ namespace Data.Migrations
                     b.HasIndex("LikedContentsId");
 
                     b.ToTable("UserLikedContents", (string)null);
-                });
-
-            modelBuilder.Entity("ContentUser1", b =>
-                {
-                    b.Property<string>("DislikedByUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DislikedContentsId")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("DislikedByUsersId", "DislikedContentsId");
-
-                    b.HasIndex("DislikedContentsId");
-
-                    b.ToTable("UserDislikedContents", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -426,21 +414,6 @@ namespace Data.Migrations
                     b.HasOne("Models.Content", null)
                         .WithMany()
                         .HasForeignKey("LikedContentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ContentUser1", b =>
-                {
-                    b.HasOne("Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("DislikedByUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Content", null)
-                        .WithMany()
-                        .HasForeignKey("DislikedContentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

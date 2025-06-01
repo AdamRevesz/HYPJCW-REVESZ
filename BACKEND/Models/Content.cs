@@ -32,6 +32,8 @@ namespace Models
         public virtual List<Comments> Comments { get; set; } = new List<Comments>();
         [MaxLength(30)]
         public string Tags { get; set; } = "";
+        public virtual List<User> LikedByUsers { get; set; } = new List<User>();
+        public virtual List<User> DislikedByUsers { get; set; } = new List<User>();
 
 
         public Content(string contentId, string title, string body, string ownerId, User owner, int numberOfLikes, List<Comments> comments, string tags)
