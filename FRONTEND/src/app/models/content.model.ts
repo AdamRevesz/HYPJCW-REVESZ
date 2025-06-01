@@ -40,9 +40,9 @@ filePath: string;
 title: string;
 body: string;
 price: number;
-likes: number;
+numberOfLikes: number;
 approvalRate: string;
-dislikes: number;
+numberOfDislikes: number;
 category: string;
 owner: UserShortViewDto;
 }

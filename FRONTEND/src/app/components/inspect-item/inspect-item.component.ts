@@ -23,15 +23,17 @@ export class InspectItemComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
   content: ContentViewDto | null = null;
   comments: CommentViewDto[] = [];
   isLoading: boolean = false;
   isSubmittingComment: boolean = false;
   isLoadingComments: boolean = false;
+  isLiking: boolean = false;
+  isDisliking: boolean = false;
   error: string | null = null;
   deleteCommentError: string | null = null;
   deletingCommentId: string | null = null;
+  userId = '2811c75d-ae64-44f4-90f7-32aa02bd2202';
 
   commentForm!: FormGroup;
 
@@ -69,25 +71,25 @@ export class InspectItemComponent implements OnInit {
 
   loadComments(id: string): void {
     this.isLoadingComments = true;
-    
+
     this.apiService.getComment(id).subscribe({
       next: (comments: CommentViewDto[]) => {
-      this.comments = comments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); //!!Don't forget to add sorting option based on likes too!!
-      console.log('Comments loaded and sorted successfully:', this.comments);
-      this.isLoadingComments = false;
-      this.isLoading = false;
+        this.comments = comments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); //!!Don't forget to add sorting option based on likes too!!
+        console.log('Comments loaded and sorted successfully:', this.comments);
+        this.isLoadingComments = false;
+        this.isLoading = false;
       },
       error: (err: HttpErrorResponse) => {
-      console.error('Error loading comments:', err);
-      this.error = `Failed to load comments. ${err.error?.message || err.message || 'Please try again'}`;
-      this.isLoadingComments = false;
-      this.isLoading = false;
+        console.error('Error loading comments:', err);
+        this.error = `Failed to load comments. ${err.error?.message || err.message || 'Please try again'}`;
+        this.isLoadingComments = false;
+        this.isLoading = false;
       }
     });
   }
 
   submitComment(): void {
-    if(!this.content || !this.content.id) {
+    if (!this.content || !this.content.id) {
       this.error = 'Cannot submit comment'
       return;
     }
@@ -99,7 +101,7 @@ export class InspectItemComponent implements OnInit {
 
     this.isSubmittingComment = true;
     this.error = null;
-    
+
     const commentData: CommentCreateDto = {
       body: this.commentForm.get('commentText')?.value
     };
@@ -112,7 +114,7 @@ export class InspectItemComponent implements OnInit {
         this.isSubmittingComment = false;
         this.loadComments(currentContentId);
       },
-      error: (err: HttpErrorResponse) =>{
+      error: (err: HttpErrorResponse) => {
         console.error('Error submitting comment:', err);
         this.error = `Failed to submit comment. ${err.error?.message || err.message || 'Please try again'}`;
         this.isSubmittingComment = false;
@@ -125,7 +127,7 @@ export class InspectItemComponent implements OnInit {
       this.deleteCommentError = 'Cannot delete comment';
       return;
     }
-    
+
     this.deletingCommentId = commentId;
     this.deleteCommentError = null;
 
@@ -145,13 +147,49 @@ export class InspectItemComponent implements OnInit {
 
   addToBasket(): void {
 
-  }
-
-  likeContent(): void {
-
+  }  likeContent(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isLiking = true;
+      this.error = null;
+      
+      this.apiService.likeContent(id, this.userId).subscribe({
+        next: () => {
+          console.log('Content liked successfully');
+          this.isLiking = false;
+          // Reload content to update like count
+          this.loadContentAndInitialComments(id);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error liking content:', error);
+          this.error = `Failed to like content: ${error.error?.message || error.message || 'Please try again'}`;
+          this.isLiking = false;
+        }
+      });
+    } else {
+      this.error = 'Unable to fetch content ID';
+      console.error('No ID found');
+    }
   }
 
   dislikeContent(): void {
-
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.error = null;
+      
+      this.apiService.dislikeContent(id, this.userId).subscribe({
+        next: () => {
+          console.log('Content disliked successfully');
+          this.loadContentAndInitialComments(id);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error disliking content:', error);
+          this.error = `Failed to dislike content: ${error.error?.message || error.message || 'Please try again'}`;
+        }
+      });
+    } else {
+      this.error = 'Unable to fetch content ID';
+      console.error('No ID found');
+    }
   }
 }

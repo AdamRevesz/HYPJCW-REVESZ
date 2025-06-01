@@ -14,6 +14,11 @@
         </div>
     </div>
     <!--Display the media-->
+    <div class="mt-4 mb-4" *ngIf="!isLoading">
+        <button routerLink="/list" class="btn btn-link p-0 border-0 bg-transparent">
+            <img src="../../../assets/Arrow.svg" alt="Go back" style="width: 40px; height: 40px; cursor: pointer;">
+        </button>
+    </div>
     <div *ngIf="content && !isLoading" class="row">
         <div class="col-md-8">
             <div class="mb-4" *ngIf="content.filePath">
@@ -26,19 +31,22 @@
                     <h1 class="mb-3 sansation-regular" style="font-weight: bold; font-size: 35px;">{{ content.title }}
                     </h1>
                     <p class="lead sansation-regular" style="font-size: 15px;">{{ content.body }}</p>
-
-                    <!--Like, dislike button-->
                     <div class="mt-auto d-flex justify-content-end">
+                        <!--Like and dislike button-->
                         <div class="btn-group" role="group">
-                            <button (click)="likeContent()" class="btn btn-outline-success upload-button"
-                                style="background-color: white; color: #5c2ca8; border: solid 1px #5c2ca8 ">
-                                Like <span>({{ content.likes }})</span>
-                            </button>
-                            <button (click)="dislikeContent()" class="btn"
-                                style="color: #5c2ca8; border: solid 1px #5c2ca8 ">
-                                Dislike <span *ngIf="content.dislikes !== undefined">({{ content.dislikes }})</span>
-                            </button>
-                        </div>
+                        <button (click)="likeContent()" 
+                            class="btn btn-outline-primary upload-button sansation-regular"
+                            style="background-color: white; color: #5c2ca8; border: solid 1px #5c2ca8;">
+                            <i class="bi bi-hand-thumbs-up me-1"></i>
+                            <span>{{ content.numberOfLikes || 0 }}</span>
+                        </button>
+                        <button (click)="dislikeContent()" 
+                            class="btn btn-outline-primary sansation-regular"
+                            style="background-color: white; color: #5c2ca8; border: solid 1px #5c2ca8;">
+                            <i class="bi bi-hand-thumbs-down me-1"></i>
+                            <span>{{ content.numberOfDislikes || 0 }}</span>
+                        </button>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -61,7 +69,7 @@
         <!--Display comments-->
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" style="background-color: white;">
                     <h5 class="mb-0">Comments ({{ comments.length }})</h5>
                 </div>
                 <div class="card-body">
@@ -110,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="comments.length === 0 && !isLoading" class="text-center text-muted">
+                    <div *ngIf="comments.length === 0 && !isLoading" class="text-center text-muted sansation-regular" style="font-size: 15px;">
                         <p>No comments yet. Be the first to comment!</p>
                     </div>
                 </div>
@@ -119,9 +127,5 @@
     </div>
 
     <!--Back button-->
-    <div class="mt-4 mb-4" *ngIf="!isLoading">
-        <button routerLink="/list" class="btn btn-secondary">
-            Back
-        </button>
-    </div>
+    
 </div>
