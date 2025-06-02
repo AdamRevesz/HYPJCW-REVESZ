@@ -117,8 +117,7 @@
     <button 
       type="submit"
       class="btn btn-primary p-3 sansation-regular upload-button" 
-      [disabled]="isSubmitting || itemForm.invalid"
-      routerLink="/marketplace">
+      [disabled]="isSubmitting || itemForm.invalid">
       <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
       {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
     </button>

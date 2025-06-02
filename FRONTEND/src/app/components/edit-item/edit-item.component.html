@@ -65,7 +65,7 @@
     </div>
     
     <div class="mb-3">
-      <label for="category" class="form-label sansation-regular">Category</label>
+      <label for="category" class="form-label sansation-regular">Tags</label>
       <input 
         type="text" 
         class="form-control" 
@@ -80,11 +80,9 @@
     
     <button 
       type="submit"
-      class="btn btn-primary p-3 sansation-regular upload-button" 
-      [disabled]="isSubmitting || pictureForm.invalid"
-      routerLink="/list">
-      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-      {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+      class="btn btn-primary p-3 sansation-regular upload-button" >
+      <span *ngIf="isSubmitting"></span>
+      Save Changes
     </button>
   </form>
         </div>

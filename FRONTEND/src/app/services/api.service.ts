@@ -39,7 +39,7 @@ export class ApiService {
   }
 
   deleteComment(commentId: string): Observable<void> {
-    return this.http.delete<void>(`${this.backendUrl}/api/deletecomment/${commentId}`);
+    return this.http.delete<void>(`${this.backendUrl}/api/Comment/deletecomment/${commentId}`);
   }
 
   getContent(): Observable<ContentShortViewDto[]> {

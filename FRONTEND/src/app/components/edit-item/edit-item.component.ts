@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ContentShortViewDto } from '../../models/content.model';
 
 @Component({
@@ -11,7 +11,10 @@ import { ContentShortViewDto } from '../../models/content.model';
   templateUrl: './edit-item.component.html',
   styleUrls: ['./edit-item.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+  ]
 })
 export class PictureCreateDto implements OnInit {
   pictureForm!: FormGroup;
@@ -121,7 +124,7 @@ export class PictureCreateDto implements OnInit {
       next: () => {
         console.log('Item updated successfully');
         this.isSubmitting = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/list']);
       },
       error: (error: HttpErrorResponse) => {
         this.uploadError = `Failed to update item: ${error.message || 'Unknown error'}`;

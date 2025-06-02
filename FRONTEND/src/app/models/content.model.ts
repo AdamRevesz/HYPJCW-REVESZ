@@ -29,7 +29,7 @@ export interface ContentShortViewDto {
   body: string;
   filePath: string;
   approvalRate: string;
-  owner: UserShortViewDto;
+  ownerDetails: UserShortViewDto;
   category: string;
 }
 
@@ -44,7 +44,7 @@ numberOfLikes: number;
 approvalRate: string;
 numberOfDislikes: number;
 category: string;
-owner: UserShortViewDto;
+ownerDetails: UserShortViewDto;
 }
 
 export interface CourseShortViewDto{

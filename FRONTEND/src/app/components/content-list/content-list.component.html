@@ -16,45 +16,42 @@
         <p>No content items found.</p>
     </div>
 
-    <button class="btn btn-primary upload-button p-3 sansation-regular fixed" routerLink="/upload">Upload your own picture</button>
+    <button class="btn btn-primary upload-button p-3 sansation-regular fixed" routerLink="/upload">Upload your own
+        picture</button>
     <div *ngIf="!isLoading && !error && contents.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        
+
         <div *ngFor="let contentItem of contents" class="col">
             <div class="container p-4"></div>
-            <div class="card d-flex shadow-sm rounded"
-            [routerLink]="['/inspectItem', contentItem.id]">
+            <div class="card d-flex shadow-sm rounded" [routerLink]="['/inspectItem', contentItem.id]">
                 <div class="card-body d-flex flex-column rounded"
-                         [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
-                         style="background-size: cover; background-position: center; min-height: 500px; color: white;">
-                        
-                          <div class="position-absolute bottom-0 end-0 m-2 d-flex">
-                            <button 
-                                *ngIf="contentItem.id" 
-                                class="btn btn-light btn-sm me-1"
-                                [routerLink]="['/edit', contentItem.id]"
-                                (click)="$event.stopPropagation()" 
-                                title="Edit {{contentItem.title}}">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button 
-                                *ngIf="contentItem.id" 
-                                (click)="confirmDelete(contentItem.id, contentItem.title); $event.stopPropagation()" 
-                                class="btn btn-danger btn-sm"
-                                title="Delete {{contentItem.title}}">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
+                    [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
+                    style="background-size: cover; background-position: center; min-height: 500px; color: white;">
 
-                        <div class="mt-auto">
-                            <h5 class="card-title">{{ contentItem.title }}</h5>
-                            <p class="card-text mb-1">
-                                {{ contentItem.owner.username }}
-                                <span class="badge bg-secondary ms-1">{{ contentItem.owner.isProfessional ? 'Professional' : 'User' }}</span>
-                            </p>
-                            <p class="card-text sansation-regular" style="color:white">Approval Rate: {{ contentItem.approvalRate }}</p>
-                            <p class="card-text mb-1"><small class="text-light">{{ contentItem.category }}</small></p>
-                        </div>
+                    <div class="position-absolute bottom-0 end-0 m-2 d-flex">
+                        <button *ngIf="contentItem.id" class="btn btn-light btn-sm me-1"
+                            [routerLink]="['/edit', contentItem.id]" (click)="$event.stopPropagation()"
+                            title="Edit {{contentItem.title}}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button *ngIf="contentItem.id"
+                            (click)="confirmDelete(contentItem.id, contentItem.title); $event.stopPropagation()"
+                            class="btn btn-danger btn-sm" title="Delete {{contentItem.title}}">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
+
+                    <div class="mt-auto">
+                        <h5 class="card-title">{{ contentItem.title }}</h5>
+                        <p class="card-text mb-1">
+                            {{ contentItem.ownerDetails.username }}
+                            <span class="badge bg-secondary ms-1">{{ contentItem.ownerDetails.isProfessional ? 'Professional' :
+                                'Hobbyist' }}</span>
+                        </p>
+                        <p class="card-text sansation-regular" style="color:white">Approval Rate: {{
+                            contentItem.approvalRate }}</p>
+                        <p class="card-text mb-1"><small class="text-light">{{ contentItem.category }}</small></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { ContentShortViewDto } from '../../models/content.model'; 
 import { RouterLink } from '@angular/router';
-import { Router } from 'express';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -64,7 +63,7 @@ export class ContentListComponent implements OnInit {
     this.deletingItemId = id;
     this.deleteError = null;
 
-    this.apiService.deletePicture(id).subscribe({
+    this.apiService.deleteContent(id).subscribe({
       next: () => {
         console.log(`Content item with ID: ${id} deleted successfully.`);
        

@@ -127,7 +127,7 @@ export class MarketplaceEditComponent implements OnInit {
       next: () => {
         console.log('Item updated successfully');
         this.isSubmitting = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/marketplace']);
       },
       error: (error: HttpErrorResponse) => {
         this.uploadError = `Failed to update item: ${error.message || 'Unknown error'}`;

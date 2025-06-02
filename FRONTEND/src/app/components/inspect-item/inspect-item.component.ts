@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -12,7 +12,6 @@ import { CommentViewDto, ContentViewDto, CommentCreateDto } from '../../models/c
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     ReactiveFormsModule
   ],
   templateUrl: './inspect-item.component.html',

@@ -90,7 +90,7 @@
                             [disabled]="commentForm.invalid || isSubmittingComment">
                             <span *ngIf="isSubmittingComment" class="spinner-border spinner-border-sm me-1"
                                 role="status" aria-hidden="true"></span>
-                            {{ isSubmittingComment ? 'Adding...' : 'Add comment' }}
+                                Add comment
                         </button>
                     </form>
 
@@ -105,11 +105,9 @@
                                     <p class="mb-1 mt-1">{{ comment.body }}</p>
                                 </div>
                                 <button class="btn btn-sm btn-outline-danger"
-                                    [disabled]="deletingCommentId === comment.id">
-                                    <span *ngIf="deletingCommentId === comment.id"
-                                        class="spinner-border spinner-border-sm" role="status"
-                                        aria-hidden="true"></span>
-                                    <i *ngIf="deletingCommentId !== comment.id" class="fas fa-trash"></i>
+                                    [disabled]="deletingCommentId === comment.id"
+                                   (click)="deleteComment(comment.id)">
+                                    <i *ngIf="deletingCommentId !== comment.id" class="bi  bi-trash"></i>
                                 </button>
                             </div>
                             <div *ngIf="deleteCommentError && deletingCommentId === comment.id"
