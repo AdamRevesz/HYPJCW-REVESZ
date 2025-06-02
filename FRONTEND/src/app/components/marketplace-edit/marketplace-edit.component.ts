@@ -5,14 +5,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SalesItemShortViewDto } from '../../models/content.model';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-marketplace-edit',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink
   ],
   templateUrl: './marketplace-edit.component.html',
   styleUrl: './marketplace-edit.component.scss'
