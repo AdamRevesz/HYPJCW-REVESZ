@@ -1,4 +1,5 @@
 ﻿using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
 using System;
@@ -15,6 +16,10 @@ namespace Data.ClassRepo
         {
         }
 
+        public override IQueryable<Picture> ReadAll()
+        {
+            return ctx.Pictures.ToList().AsQueryable().Include(v => v.Owner);
+        }
         public override Picture Read(string id)
         {
             return ctx.Pictures.FirstOrDefault(x => x.Id == id);

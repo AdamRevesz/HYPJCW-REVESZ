@@ -109,7 +109,7 @@ namespace Logic.Helper
                 ;
 
                 cfg.CreateMap<Content, ContentShortViewDto>()
-                    .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
+                    .ForMember(dest => dest.OwnerDetails, opt => opt.MapFrom(src => src.Owner))
                     .AfterMap((src, dest) =>
                     {
                         double totalVotes = src.NumberOfLikes + src.NumberOfDislikes;
@@ -123,14 +123,18 @@ namespace Logic.Helper
                 cfg.CreateMap<VideoCreateUpdateDto, Video>();
                 cfg.CreateMap<Picture, PictureViewDto>();
                 cfg.CreateMap<PictureCreateUpdateDto, Picture>();
+                cfg.CreateMap<PictureCreateDto, Picture>()
+                .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId));
                 cfg.CreateMap<Course, CourseViewDto>();
                 cfg.CreateMap<CourseCreateUpdateDto, Course>();
                 cfg.CreateMap<SalesItem, SalesItemViewDto>();
                 cfg.CreateMap<SalesItemCreateUpdateDto, SalesItem>();
+                cfg.CreateMap<SalesItemCreateDto, SalesItem>();
                 cfg.CreateMap<CommentCreateUpdateDto, Comments>();
                 cfg.CreateMap<User, UserViewDto>();
                 cfg.CreateMap<UserUpdateDto, User>();
                 cfg.CreateMap<UserUpdatePictureDto, User>();
+                cfg.CreateMap<UserCreateDto, User>();
                 cfg.CreateMap<Comments, CommentViewDto>()
             .ForMember(dest => dest.Username, opt => opt.Ignore());
             });
@@ -145,13 +149,11 @@ namespace Logic.Helper
         }
         public async Task<List<CommentViewDto>> MapCommentsToDtosAsync(List<Comments> comments)
         {
-            // Pre-fetch user data
             var userIds = comments.Select(c => c.PosterId).Distinct().ToList();
             var users = await userManager.Users.AsNoTracking()
                 .Where(u => userIds.Contains(u.Id))
                 .ToDictionaryAsync(u => u.Id, u => u.UserName);
 
-            // Map comments to DTOs
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Comments, CommentViewDto>()
@@ -168,14 +170,12 @@ namespace Logic.Helper
         {
             var dto = Mapper.Map<CommentViewDto>(comment);
 
-            // If a username cache is provided, use it
             if (usernameCache != null && usernameCache.ContainsKey(comment.PosterId))
             {
                 dto.Username = usernameCache[comment.PosterId];
             }
             else
             {
-                // Otherwise look it up individually - this is less efficient
                 var user = userManager.Users.AsNoTracking()
                     .FirstOrDefault(u => u.Id == comment.PosterId);
                 dto.Username = user?.UserName ?? "Unknown";

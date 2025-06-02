@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic
 {
@@ -38,7 +39,9 @@ namespace Logic
 
         public IEnumerable<CourseShortViewDto> GetAllCourses()
         {
-            return courseRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<CourseShortViewDto>(x));
+            return courseRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<CourseShortViewDto>(x))
+                .Include(c => c.Owner)
+                .ToList();
         }
 
         public void DeleteCourse(string id)

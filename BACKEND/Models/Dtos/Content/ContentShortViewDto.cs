@@ -16,7 +16,8 @@ namespace Models.Dtos.Content
         public string Body { get; set; } = "";
         public string Title { get; set; } = "";
         public string ApprovalRate { get; set; } = "";
-        public UserShortViewDto Owner { get; set; } = new UserShortViewDto();
+        public string OwnerId { get; set; } = "";
         public string Category { get; set; } = "";
+        public UserShortViewDto? OwnerDetails { get; set; }
     }
 }

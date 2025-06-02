@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Models.Dtos.UserDto;
 using Logic;
+using Models.Dtos.Content;
 
 namespace Backend_Feleves.Endpoint.Controllers
 {
@@ -21,16 +22,18 @@ namespace Backend_Feleves.Endpoint.Controllers
         RoleManager<IdentityRole> roleManager;
         DtoProvider dtoProvider;
         UserLogic logic;
+        ContentLogic contentLogic;
 
         private readonly SignInManager<User> _signInManager;
-   
-  public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider, SignInManager<User> signInManager, UserLogic logic)
+
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DtoProvider dtoProvider, SignInManager<User> signInManager, UserLogic logic, ContentLogic contentLogic)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dtoProvider = dtoProvider;
             _signInManager = signInManager;
             this.logic = logic;
+            this.contentLogic = contentLogic;
 
             Task.Run(async () =>
             {
@@ -106,7 +109,12 @@ namespace Backend_Feleves.Endpoint.Controllers
         public async Task<IEnumerable<UserViewDto>> GetUser(string id)
         {
             var user = userManager.Users.FirstOrDefault(u => u.Id == id);
-            return new List<UserViewDto> { dtoProvider.Mapper.Map<UserViewDto>(user) };
+            var contents = contentLogic.GetContentByOwner(id);
+
+            var userDto = dtoProvider.Mapper.Map<UserViewDto>(user);
+            userDto.CreatedContents = contents.ToList();
+
+            return new List<UserViewDto> { userDto };
         }
 
         [HttpGet]
@@ -212,6 +220,19 @@ namespace Backend_Feleves.Endpoint.Controllers
                   expires: DateTime.Now.AddMinutes(expiryInMinutes),
                   signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(string json)
+        {
+            logic.AddUserFromJson(json);
+            return Ok();
+        }
+
+        [HttpDelete("/deleteusers")]
+        public void DeleteUsersWithoutEmail()
+        {
+            logic.DeleteUsersWithoutEmail();
         }
     }
 }

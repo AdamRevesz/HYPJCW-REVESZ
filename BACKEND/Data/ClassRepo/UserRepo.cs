@@ -1,4 +1,5 @@
 ﻿using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Models;
 using Repository;
@@ -14,6 +15,11 @@ namespace Data.ClassRepo
     {
         public UserRepo(MainDbContext ctx): base(ctx)
         {
+        }
+
+        public override IQueryable<User> ReadAll()
+        {
+            return ctx.Users.ToList().AsQueryable(); ;
         }
 
         public override User Read(string id)

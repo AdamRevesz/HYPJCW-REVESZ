@@ -38,7 +38,7 @@ namespace Backend_Feleves.Endpoint.Controllers
 
             await logic.AddCourse(dto);
 
-            return Ok();
+            return Ok(new {message="Course added successfully"});
         }
 
         [HttpGet]
@@ -78,7 +78,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             try
             {
                 logic.UpdateCourse(id, dto, userId);
-                return Ok();
+                return Ok(new { message = "Course added successfully" });
             }
             catch (UnauthorizedAccessException)
             {

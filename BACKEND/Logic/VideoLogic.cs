@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic
 {
@@ -38,7 +39,9 @@ namespace Logic
 
         public IEnumerable<VideoShortViewDto> GetAllVideos()
         {
-            return videoRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<VideoShortViewDto>(x));
+            return videoRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<VideoShortViewDto>(x))
+                .Include(v => v.Owner)
+                .ToList();
         }
 
         public void DeleteVideo(string id)

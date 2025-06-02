@@ -1,4 +1,5 @@
 ﻿using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
 using System;
@@ -13,6 +14,11 @@ namespace Data.ClassRepo
     {
         public CourseRepo(MainDbContext ctx): base(ctx) 
         { 
+        }
+
+        public override IQueryable<Course> ReadAll()
+        {
+            return ctx.Courses.ToList().AsQueryable().Include(v => v.Owner);
         }
 
         public override Course Read(string id)

@@ -1,4 +1,5 @@
 ﻿using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
 using System;
@@ -15,6 +16,10 @@ namespace Data.ClassRepo
         {
         }
 
+        public override IQueryable<Video> ReadAll()
+        {
+            return ctx.Videos.ToList().AsQueryable().Include(v => v.Owner);
+        }
         public override Video Read(string id)
         {
             return ctx.Videos.FirstOrDefault(x => x.Id == id);

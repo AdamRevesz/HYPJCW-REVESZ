@@ -37,6 +37,13 @@ namespace Backend_Feleves.Endpoint.Controllers
 
             await logic.AddPicture(dto);
 
+            return Ok(new {message = "Picture added succsessfully"});
+        }
+
+        [HttpPost("/addpicturelist")]
+        public async Task<IActionResult> AddPictureList([FromBody] PictureCreateDto dtos)
+        {
+            await logic.AddPictureList(dtos);
             return Ok();
         }
 
@@ -72,7 +79,6 @@ namespace Backend_Feleves.Endpoint.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdatePicture(string id, [FromForm] PictureCreateUpdateDto dto, [FromForm] IFormFile? uploadedFile)
         {
-
             if (uploadedFile != null && uploadedFile.Length > 0)
             {
                 string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
@@ -84,7 +90,7 @@ namespace Backend_Feleves.Endpoint.Controllers
                 using var stream = new FileStream(fullPath, FileMode.Create);
                 await uploadedFile.CopyToAsync(stream);
 
-                dto.FilePath = Path.Combine("images", fileName);
+                dto.FilePath = $"assets/UploadedPictures/{fileName}";
             }
             else
             {
@@ -94,9 +100,9 @@ namespace Backend_Feleves.Endpoint.Controllers
                     dto.FilePath = existing.FilePath;
                 }
             }
-                logic.UpdatePicture(id, dto);
-                return Ok();
-            
+
+            logic.UpdatePicture(id, dto);
+            return Ok(new {message = "Picture updated successfully"});
         }
 
         [HttpPut("/updatepictureadmin/{id}")]
@@ -110,6 +116,13 @@ namespace Backend_Feleves.Endpoint.Controllers
         public PictureViewDto GetPicture(string id)
         {
             return logic.GetPicture(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPictureFromJson (string json)
+        {
+            logic.AddPicturesFromJson(json);
+            return Ok();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public void AddContent(ContentCreateDto dto)
         {
             logic.AddContent(dto);
@@ -49,7 +49,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             try
             {
                 logic.DeleteOwnerContent(id, userId);
-                return Ok();
+                return Ok(new { message = "Content deleted successfully" });
             }
             catch (UnauthorizedAccessException)
             {
@@ -65,7 +65,7 @@ namespace Backend_Feleves.Endpoint.Controllers
             try
             {
                 logic.UpdateContent(id, userId, dto);
-                return Ok();
+                return Ok(new { message = "Content updated successfully" });
             }
             catch (UnauthorizedAccessException)
             {
@@ -77,6 +77,36 @@ namespace Backend_Feleves.Endpoint.Controllers
         public ContentViewDto GetContent(string id)
         {
             return logic.GetContent(id);
+        }
+
+        [HttpDelete]
+        public void DeleteAllContent()
+        {
+            logic.DeleteAllContent();
+        }
+
+        [HttpPut("randomstats")]
+        public void RandomLikes()
+        {
+            logic.LikeDislikeViewership();
+        }
+
+        [HttpPut("randomtags")]
+        public void RandomTags()
+        {
+            logic.RandomTag();
+        }
+
+        [HttpPut("randompictures")]
+        public void RandomPictures()
+        {
+            logic.RandomFilePath();
+        }
+
+        [HttpDelete("Withoutowner")]
+        public void DeleteWithoutOwner()
+        {
+            logic.DeleteAllContentWithNoExistingUserId();
         }
     }
 }

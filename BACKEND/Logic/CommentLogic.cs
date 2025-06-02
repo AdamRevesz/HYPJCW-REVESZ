@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Repo;
 using Data.ClassRepo;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic
 {
@@ -37,6 +38,7 @@ namespace Logic
             var comments = commentRepo
                 .ReadAll()
                 .Where(c => c.ContentId == contentId)
+                .Include(u => u.Owner)
                 .ToList();
 
             return await dtoProvider.MapCommentsToDtosAsync(comments);
@@ -44,7 +46,6 @@ namespace Logic
 
         public void DeleteComment(string id)
         {
-            var comment = commentRepo.Read(id);
             commentRepo.Remove(id);           
         }
 

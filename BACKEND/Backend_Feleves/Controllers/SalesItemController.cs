@@ -98,7 +98,7 @@ namespace Backend_Feleves.Endpoint.Controllers
                 }
             }
             logic.UpdateSalesItem(id, dto);
-            return Ok();
+            return Ok(new {message ="SalesItems updated successfully."});
 
         }
 
@@ -106,6 +106,18 @@ namespace Backend_Feleves.Endpoint.Controllers
         public SalesItemViewDto GetSalesItem(string id)
         {
             return logic.GetSalesItem(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSalesItemsFromJson(string json)
+        {
+            logic.AddSalesItemsFromJson(json);
+            return Ok();
+        }
+        [HttpPut]
+        public void RandomPrice()
+        {
+            logic.Randomprice();
         }
     }
 }

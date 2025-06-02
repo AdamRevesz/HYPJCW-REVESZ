@@ -1,4 +1,5 @@
 ﻿using Data.Repo;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
 using System;
@@ -13,6 +14,11 @@ namespace Data.ClassRepo
     {
         public SalesItemRepo(MainDbContext ctx) : base(ctx)
         {
+        }
+
+        public override IQueryable<SalesItem> ReadAll()
+        {
+            return ctx.SalesItems.ToList().AsQueryable().Include(v => v.Owner);
         }
 
         public override SalesItem Read(string id)

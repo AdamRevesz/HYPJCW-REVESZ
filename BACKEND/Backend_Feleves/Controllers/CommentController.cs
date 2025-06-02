@@ -29,8 +29,15 @@ namespace Backend_Feleves.Endpoint.Controllers
         [HttpPost("/api/addcomment/")]
         public IActionResult AddComment([FromQuery]string contentId, CommentCreateUpdateDto dto)
         {
-            _logic.AddComment(contentId,dto);
-            return Ok("Comment added successfully.");
+            try
+            {
+                _logic.AddComment(contentId, dto);
+                return Ok(new { message = "Comment added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpGet("/api/{contentId}")]
@@ -39,12 +46,23 @@ namespace Backend_Feleves.Endpoint.Controllers
             return await _logic.GetAllComments(contentId);
         }
 
-        [HttpDelete("/api/deletecomment/{id}")]
-        //[Authorize(Roles = "User")]
+        [HttpDelete("deletecomment/{id}")]
         public IActionResult DeleteComment(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Comment ID is required");
+            }
+
+            try
+            {
                 _logic.DeleteComment(id);
-                return Ok();
+                return Ok( new {message = "Comment deleted successfully."});
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Comment not found: {ex.Message}");
+            }
         }
 
         [HttpPut("/api/updatecomment/{id}")]

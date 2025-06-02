@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models.Dtos.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,6 @@ namespace Models.Dtos.User
         public string LastName { get; set; } = "";
         public bool IsProfessional { get; set; }
         public string FilePath { get; set; } = "";
+        public List<ContentShortViewDto> CreatedContents { get; set; } = new List<ContentShortViewDto>();
     }
 }

@@ -34,10 +34,7 @@ namespace Repository
             ctx.SaveChanges();
         }
 
-        public IQueryable<T> ReadAll()
-        {
-            return ctx.Set<T>().Include("Owner");
-        }
+        public abstract IQueryable<T> ReadAll();
         public void Remove(string id)
         {
             ctx.Set<T>().Remove(Read(id));

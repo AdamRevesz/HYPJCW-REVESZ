@@ -24,10 +24,11 @@ namespace Models
         public string Body { get; set; } = "";
         public int Price { get; set; } = 0;
         public string OwnerId { get; set; } = ""; // Foreign key to User
-        public virtual User Owner { get; set; } = new User();
+        public virtual User? Owner { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
         public int NumberOfLikes { get; set; }
         public int NumberOfDislikes { get; set; }
+        public int Views { get; set; }
         [NotMapped]
         public virtual List<Comments> Comments { get; set; } = new List<Comments>();
         [MaxLength(30)]
