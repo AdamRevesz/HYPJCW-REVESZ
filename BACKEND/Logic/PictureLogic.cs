@@ -29,7 +29,7 @@ namespace Logic
             return pictureRepo.Read(id);
         }
 
-        public async Task AddPicture(PictureCreateUpdateDto dto)
+        public async Task AddPicture(PictureCreateDto dto)
         {
 
             Picture picture = dtoProvider.Mapper.Map<Picture>(dto);

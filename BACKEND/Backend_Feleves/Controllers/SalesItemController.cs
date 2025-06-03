@@ -21,7 +21,7 @@ namespace Backend_Feleves.Endpoint.Controllers
 
         [HttpPost("addsalesitem")]
         //[Authorize]
-        public async Task<IActionResult> AddSalesItem([FromForm] SalesItemCreateUpdateDto dto, [FromForm] IFormFile uploadedFile)
+        public async Task<IActionResult> AddSalesItem([FromForm] SalesItemCreateDto dto, [FromForm] IFormFile uploadedFile)
         {
             if (uploadedFile != null && uploadedFile.Length > 0)
             {

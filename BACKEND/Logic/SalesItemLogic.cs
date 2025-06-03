@@ -30,7 +30,7 @@ namespace Logic
             return salesItemRepo.Read(id);
         }
 
-        public async Task AddSalesItem(SalesItemCreateUpdateDto dto)
+        public async Task AddSalesItem(SalesItemCreateDto dto)
         {
             SalesItem salesItem = dtoProvider.Mapper.Map<SalesItem>(dto);
 

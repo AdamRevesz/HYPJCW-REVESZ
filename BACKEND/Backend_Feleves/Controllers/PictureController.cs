@@ -19,7 +19,7 @@ namespace Backend_Feleves.Endpoint.Controllers
 
         [HttpPost("/addpicture")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddPicture( [FromForm] PictureCreateUpdateDto dto, [FromForm] IFormFile uploadedFile)
+        public async Task<IActionResult> AddPicture( [FromForm] PictureCreateDto dto, [FromForm] IFormFile uploadedFile)
         {
             if (uploadedFile != null && uploadedFile.Length > 0)
             {
@@ -55,9 +55,10 @@ namespace Backend_Feleves.Endpoint.Controllers
 
         [HttpDelete("/deletepicture/{id}")]
         [Authorize(Roles = "Admin")]
-        public void DeletePicture(string id)
+        public IActionResult DeletePicture(string id)
         {
             logic.DeletePicture(id);
+            return Ok(new { message="Data deleted successfully" });
         }
 
         [HttpDelete("/deleteownerpicture/{id}")]
