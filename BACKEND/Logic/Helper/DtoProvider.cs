@@ -119,6 +119,7 @@ namespace Logic.Helper
                             : "N/A";
                     });
                 cfg.CreateMap<Content, ContentViewDto>();
+                cfg.CreateMap<Content, ContentCategoryCountDto>();
                 cfg.CreateMap<ContentCreateDto, Content>();
                 cfg.CreateMap<Video, VideoViewDto>();
                 cfg.CreateMap<VideoCreateUpdateDto, Video>();
@@ -133,6 +134,8 @@ namespace Logic.Helper
                 cfg.CreateMap<SalesItemCreateDto, SalesItem>();
                 cfg.CreateMap<CommentCreateUpdateDto, Comments>();
                 cfg.CreateMap<User, UserViewDto>();
+                cfg.CreateMap<User, UserContentCountDto>()
+                .ForMember(dest => dest.ContentCount, opt => opt.Ignore());
                 cfg.CreateMap<UserUpdateDto, User>();
                 cfg.CreateMap<UserUpdatePictureDto, User>();
                 cfg.CreateMap<UserCreateDto, User>();

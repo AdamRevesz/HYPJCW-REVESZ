@@ -95,5 +95,31 @@ namespace Logic
                      .FirstOrDefault();
             return new Dictionary<string, ContentShortViewDto> { { highestApprovedCreator.Key, highestApprovedCreator.Value } };
         }
+
+        public List<UserContentCountDto> GetUserContentcount()
+        {
+            var userContentCount = userRepo.ReadAll()
+                .GroupBy(u => u.UserName)
+                .Select(g => new UserContentCountDto
+                {
+                    Username = g.Key,
+                    ContentCount = contentRepo.ReadAll().Count(c => c.Owner.UserName == g.Key)
+                })
+                .ToList();
+            return userContentCount;
+        }
+
+        public List<ContentCategoryCountDto> GetContentCountByCategory()
+        {
+            var categoryCount = contentRepo.ReadAll()
+                .GroupBy(c => c.Category)
+                .Select(g => new ContentCategoryCountDto
+                {
+                    Category = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+            return categoryCount;
+        }
     }
 }

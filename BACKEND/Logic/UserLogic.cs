@@ -70,6 +70,12 @@ namespace Logic
             }
         }
 
+        public IEnumerable<UserShortViewDto> GetAllUsers()
+        {
+            return userRepo.ReadAll().Select(x => dtoProvider.Mapper.Map<UserShortViewDto>(x))
+                .ToList();
+        }
+
 
 
     }

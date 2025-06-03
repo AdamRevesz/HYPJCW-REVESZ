@@ -24,7 +24,7 @@ namespace Backend_Feleves.Controllers
         }
 
         [HttpGet("filterContentByCategory")]
-        public IEnumerable<ContentShortViewDto>GetContentByCategory(string category)
+        public IEnumerable<ContentShortViewDto> GetContentByCategory(string category)
         {
             if (category.IsNullOrEmpty())
             {
@@ -56,7 +56,7 @@ namespace Backend_Feleves.Controllers
         }
 
         [HttpGet("getContentHighestRatedContentOfUser")]
-        public ContentShortViewDto GetContentHighestRatedContentOfUser([FromQuery]string username)
+        public ContentShortViewDto GetContentHighestRatedContentOfUser([FromQuery] string username)
         {
             if (username.IsNullOrEmpty())
             {
@@ -85,6 +85,28 @@ namespace Backend_Feleves.Controllers
                 BadRequest(ex.Message);
             }
             return contentLogic.GetAllContent().ToDictionary(c => c.Id, c => c);
+        }
+
+        [HttpGet("UserContentCount")]
+        public List<UserContentCountDto> GetUserContentCount()
+        {
+            var users = userLogic.GetAllUsers();
+            if (users is null)
+            {
+                throw new ArgumentException("No users found.");
+            }
+            return filterLogic.GetUserContentcount();
+        }
+
+        [HttpGet("getContentCategoryCount")]
+        public List<ContentCategoryCountDto> GetContentCategoryCount()
+        {
+            var content = contentLogic.GetAllContent();
+            if (content is null)
+            {
+                throw new ArgumentException("No content found.");
+            }
+            return filterLogic.GetContentCountByCategory();
         }
     }
 }
