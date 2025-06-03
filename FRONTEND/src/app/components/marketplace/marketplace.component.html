@@ -33,11 +33,11 @@
 
             <!-- List Items -->
             <li *ngFor="let salesItem of contents" class="list-group-item">
-                <div class="row w-100 align-items-center text-center">
+                <div class="row w-100 align-items-center text-center p-3">
                     <!-- Image -->
                     <div class="col-12 col-md-2">
                         <img *ngIf="salesItem.filePath" [src]="salesItem.filePath" alt="{{ salesItem.title }}"
-                             class="img-fluid rounded" style="max-height: 75px; width: auto; max-width: 100%;">
+                             class="rounded" style="height: 100px; width: 100px; background-size: cover; background-position: center;">
                         <div *ngIf="!salesItem.filePath" class="text-muted small">No image</div>
                     </div>
                     <!-- Title -->
