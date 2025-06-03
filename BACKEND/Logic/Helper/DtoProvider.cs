@@ -30,7 +30,7 @@ namespace Logic.Helper
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Content, ContentShortViewDto>()
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
                 .AfterMap((src, dest) =>
                 {
                     if (src.NumberOfLikes + src.NumberOfDislikes == 0)

@@ -127,7 +127,7 @@ namespace Logic
             foreach (var content in contents)
             {
                 int randomIndex = r.Next(tags.Length);
-                content.Tags = tags[randomIndex];
+                content.Category = tags[randomIndex];
                 contentRepo.Update(content);
             }
         }

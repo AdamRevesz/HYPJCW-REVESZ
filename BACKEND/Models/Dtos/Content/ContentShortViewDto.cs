@@ -17,7 +17,7 @@ namespace Models.Dtos.Content
         public string Title { get; set; } = "";
         public string ApprovalRate { get; set; } = "";
         public string OwnerId { get; set; } = "";
-        public string Tags { get; set; } = "";
+        public string Category { get; set; } = "";
         public UserShortViewDto? OwnerDetails { get; set; }
     }
 }

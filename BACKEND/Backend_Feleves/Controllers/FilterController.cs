@@ -56,21 +56,21 @@ namespace Backend_Feleves.Controllers
         }
 
         [HttpGet("getContentHighestRatedContentOfUser")]
-        public IEnumerable<ContentShortViewDto> GetContentHighestRatedContentOfUser(string userId)
+        public ContentShortViewDto GetContentHighestRatedContentOfUser([FromQuery]string username)
         {
-            if (userId.IsNullOrEmpty())
+            if (username.IsNullOrEmpty())
             {
-                return contentLogic.GetAllContent();
+                throw new ArgumentException("User ID cannot be null or empty.");
             }
             try
             {
-                return filterLogic.GetContentHighestRatedContentOfUser(userId);
+                return filterLogic.GetContentHighestRatedContentOfUser(username);
             }
             catch (ArgumentException ex)
             {
                 BadRequest(ex.Message);
             }
-            return contentLogic.GetAllContent();
+            throw new ArgumentException("User not found or has no content.");
         }
 
         [HttpGet("getHighestApprovedCreator")]

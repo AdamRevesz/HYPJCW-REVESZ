@@ -31,7 +31,7 @@ namespace Logic
         public IEnumerable<ContentShortViewDto> GetContentByCategory(string category)
         {
             var contentList = contentRepo.ReadAll()
-                .Where(c => c.Tags == category)
+                .Where(c => c.Category == category)
                 .ToList();
             return contentList
                 .Select(x => dtoProvider.Mapper.Map<ContentShortViewDto>(x))
@@ -50,7 +50,7 @@ namespace Logic
             return contentList;
         }
 
-        public IEnumerable<ContentShortViewDto> GetContentHighestRatedContentOfUser(string username)
+        public ContentShortViewDto GetContentHighestRatedContentOfUser(string username)
         {
             var contentList = contentRepo.ReadAll()
                 .Where(c => c.Owner.UserName == username)
@@ -59,7 +59,7 @@ namespace Logic
                 .ThenByDescending(c => c.Views)
                 .Select(dtoProvider.Mapper.Map<ContentShortViewDto>)
                 .OrderByDescending(c => c.ApprovalRate)
-                .ToList();
+                .FirstOrDefault();
             return contentList;
         }
 
