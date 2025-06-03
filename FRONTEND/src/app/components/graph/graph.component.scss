@@ -1,0 +1,19 @@
+// Responsive adjustments only
+@media (max-width: 768px) {
+  .chart-wrapper {
+    height: 300px !important;
+  }
+  
+  .bar {
+    max-width: 40px !important;
+  }
+  
+  .bar-label {
+    font-size: 0.75rem !important;
+    max-width: 60px !important;
+  }
+  
+  .y-label {
+    font-size: 0.75rem !important;
+  }
+}

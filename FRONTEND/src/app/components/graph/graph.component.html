@@ -1,0 +1,58 @@
+<div class="container mt-4">
+    <!-- Chart type selector buttons -->
+    <div class="mb-3 text-center">
+        <h2 class="mb-3">Analytics Dashboard</h2>
+        <button 
+            class="btn btn-primary btn-sm me-2" 
+            style="background-color:#5c2ca8; border: 0px;" 
+            onmousedown="this.style.backgroundColor='#3d1d70'" 
+            onmouseup="this.style.backgroundColor='#3d1d70'"
+            onmouseleave="this.style.backgroundColor='#5c2ca8'"
+            (click)="loadUserContentData()">
+            User Content
+        </button>
+        <button 
+            class="btn btn-success btn-sm me-2" 
+            style="background-color:#5c2ca8; border: 0px;" 
+            onmousedown="this.style.backgroundColor='#4a238a'" 
+            onmouseleave="this.style.backgroundColor='#5c2ca8'"
+            (click)="loadCategoryData()">
+            Categories
+        </button>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Loading chart data...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    <!-- Chart display -->
+    <div class="card shadow-sm d-flex p-4" style="width: auto; height: auto;">
+        <div *ngIf="!isLoading && !error && chartOptions">
+            <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+                [yaxis]="chartOptions.yaxis" [title]="chartOptions.title" [colors]="chartOptions.colors"
+                [labels]="chartOptions.labels" [grid]="chartOptions.grid" [dataLabels]="chartOptions.dataLabels"
+                [legend]="chartOptions.legend">
+            </apx-chart>
+        </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && !error && !chartOptions" class="text-center mt-5">
+        <div class="card border-0">
+            <div class="card-body">
+                <i class="bi bi-bar-chart display-1 text-muted"></i>
+                <h4 class="text-muted mt-3">Select a Chart Type</h4>
+                <p class="text-muted">Choose one of the options above to display analytics data</p>
+            </div>
+        </div>
+    </div>
+</div>

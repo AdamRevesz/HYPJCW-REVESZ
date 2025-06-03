@@ -1,0 +1,84 @@
+<div class="container p-5"></div>
+
+<div class="justify-content-center align-items-center container-fluid p-4">
+    <div *ngIf="isLoading" class="loading-indicator text-center my-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading sales items...</p> 
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error && contents.length === 0" class="no-content text-center my-5">
+        <p>No sales items found.</p>
+    </div>
+
+    <button class="btn btn-primary upload-button p-3 sansation-regular mb-3" routerLink="/salesupload">Upload New Sales Item</button> 
+    
+    <div *ngIf="!isLoading && !error && contents.length > 0">
+        <ul class="list-group shadow-sm">
+           <li class="list-group-item list-group-item-secondary d-none d-md-flex" style="background-color: #5c2ca8;">
+                <div class="row w-100 text-center">
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">Image</div>
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">Title</div>
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">In stock</div>
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">Type</div>
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">Price</div>
+                    <div class="col-md-2 fw-bold sansation-regular" style="color: white;">Actions</div>
+                </div>
+            </li>
+
+            <!-- List Items -->
+            <li *ngFor="let salesItem of contents" class="list-group-item">
+                <div class="row w-100 align-items-center text-center p-3">
+                    <!-- Image -->
+                    <div class="col-12 col-md-2">
+                        <img *ngIf="salesItem.filePath" [src]="salesItem.filePath" alt="{{ salesItem.title }}"
+                             class="rounded" style="height: 100px; width: 100px; background-size: cover; background-position: center;">
+                        <div *ngIf="!salesItem.filePath" class="text-muted small">No image</div>
+                    </div>
+                    <!-- Title -->
+                    <div class="col-12 col-md-2">
+                        <h6 class="mb-0 sansation-regular">{{ salesItem.title }}</h6>
+                    </div>
+                    <!-- Description -->
+                    <div class="col-12 col-md-2">
+                        <span *ngIf="salesItem.inStock" class="text-success sansation-regular" style="font-weight: bold;">In Stock</span>
+                        <span *ngIf="!salesItem.inStock" class="sansation-regular" style="font-weight: bold; color:#d90429;">Out of Stock</span>
+                    </div>
+                    <!-- Type -->
+                    <div class="col-12 col-md-2">
+                        <span class="badge" style="background-color: #5c2ca8;">{{ salesItem.type }}</span>
+                    </div>
+                    <!-- Price -->
+                    <div class="col-12 col-md-2 text-md-center sansation-regular">
+                        <strong>{{ salesItem.price | currency:'USD':'symbol' }}</strong>
+                    </div>
+                    <!-- Actions -->
+                    <div class="col-12 col-md-2">
+                        <div class="d-flex justify-content-center">
+                            <button 
+                                *ngIf="salesItem.id"
+                                class="btn btn-outline-primary btn-sm me-2 button-edit"
+                                [routerLink]="['/editItem', salesItem.id]"
+                                title="Edit {{salesItem.title}}">
+                                <i class="bi bi-pencil"></i> <span class="d-none d-lg-inline"> Edit</span>
+                            </button>
+                            <button 
+                                *ngIf="salesItem.id" 
+                                (click)="confirmDelete(salesItem.id, salesItem.title)" 
+                                class="btn btn-danger btn-sm"
+                                style="background-color: #5c2ca8; border: 1px solid #5c2ca8;"
+                                title="Delete {{salesItem.title}}">
+                                <i class="bi bi-trash"></i> <span class="d-none d-lg-inline"> Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

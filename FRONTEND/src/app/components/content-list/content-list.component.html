@@ -1,0 +1,100 @@
+<div class="container p-5"></div>
+
+<div class="justify-content-center align-items-center container-fluid p-4">
+    <div *ngIf="isLoading" class="loading-indicator text-center my-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading content...</p>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error && contents.length === 0" class="no-content text-center my-5">
+        <p>No content items found.</p>
+    </div>
+
+    <button class="btn btn-primary upload-button p-3 sansation-regular fixed mb-4" routerLink="/upload">Upload your own
+        picture</button>
+
+    <!-- Filter buttons -->
+    <div class="mb-3">
+        <button class="btn  me-2" style="background-color: #476fdb; color: white; " (click)="loadAllContent()">All Content</button>
+        <button class="btn  me-2" style="background-color: #476fdb; color: white;" (click)="getHighestApprovedCreator()">Top Creator</button>
+        <button class="btn  me-2" style="background-color: #476fdb; color: white;" (click)="getHighestApprovedContents()">Highest Approved</button>
+        <form class="d-inline-flex align-items-center" (ngSubmit)="searchUserContent()">
+            <input 
+                type="text" 
+                class="form-control me-2" 
+                placeholder="Enter username..." 
+                [(ngModel)]="username" 
+                name="username"
+                style="width: 200px;">
+            <button type="submit" class="btn btn-success" [disabled]="!username.trim()">
+                Search User
+            </button>
+        </form>
+        <form class="d-inline-flex align-items-center ms-2" (ngSubmit)="searchContentCategory()">
+            <input 
+                type="text" 
+                class="form-control me-2" 
+                placeholder="Enter category" 
+                [(ngModel)]="category" 
+                name="username"
+                style="width: 200px;">
+            <button type="submit" class="btn btn-success" [disabled]="!category.trim()">
+                Search Catehory
+            </button>
+        </form>
+    </div>
+
+    <!-- Top creatorName-->
+    <div *ngIf="getTopCreatorName()" class="alert alert-info mb-3" style="background-color: #64a82c; border: 0px;">
+        <h4 class="mb-0 sansation-regular" style="color: white; font-weight: bold; font-size: 25px;"> Top Creator: {{ getTopCreatorName() }}</h4>
+    </div>
+
+    <!-- Displaying contents -->
+    <div *ngIf="!isLoading && !error && contents.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div *ngFor="let contentItem of contents" class="col">
+            <div class="card d-flex shadow-sm rounded" [routerLink]="['/inspectItem', contentItem.id]">
+                <div class="card-body d-flex flex-column rounded"
+                    [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('+ contentItem.filePath +')'"
+                    style="background-size: cover; background-position: center; min-height: 500px; color: white;">
+
+                    <!-- Buttons only show up in sorting or listing -->
+                    <div *ngIf="!getTopCreatorName()" class="position-absolute bottom-0 end-0 m-2 d-flex">
+                        <button *ngIf="contentItem.id" class="btn btn-light btn-sm me-1"
+                            [routerLink]="['/edit', contentItem.id]" (click)="$event.stopPropagation()"
+                            title="Edit {{contentItem.title}}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button *ngIf="contentItem.id"
+                            (click)="confirmDelete(contentItem.id, contentItem.title); $event.stopPropagation()"
+                            class="btn btn-danger btn-sm" title="Delete {{contentItem.title}}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+
+                    <div *ngIf="getTopCreatorName()" class="position-absolute top-0 start-0 m-2">
+                        <span class="badge bg-warning text-dark">Top Creator</span>
+                    </div>
+
+                    <div class="mt-auto">
+                        <h5 class="card-title">{{ contentItem.title }}</h5>
+                        <p class="card-text mb-1">
+                            {{ getTopCreatorName() || contentItem.ownerDetails.username }}
+                            <span class="badge bg-secondary ms-1">{{ contentItem.ownerDetails.isProfessional ?
+                                'Professional' :
+                                'Hobbyist' }}</span>
+                        </p>
+                        <p class="card-text sansation-regular mb-0" style="color:white">Approval Rate: {{
+                            contentItem.approvalRate }}</p>
+                        <p class="card-text "><small class="text-light">{{ contentItem.category }}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

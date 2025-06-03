@@ -1,0 +1,127 @@
+<div class="container p-2"></div>
+<div class="container-fluid d-flex justify-content-center mt-5 align-items-center min-vh-100">
+    <div class="card shadow-sm" style="width: 70rem; border-radius: 15px; border: 1px solid #dadce0">
+        <div class="card-body p-4">
+  <h2 class="text-center p-2 sansation-regular" style="font-weight: bold; font-size: 35px; color: #5c2ca8;">
+    Edit post:
+  </h2>
+  <h3 class="text-center p-2 sansation-regular" style="font-size: 30px; color:black;"> {{ salesItem?.title || 'Item' }}</h3>
+  
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+
+    <div class="mb-4 p-2">
+      <div 
+        class="upload-area p-4"
+        [class.has-image]="imagePreview"
+        (click)="fileInput.click()" 
+        style="border: 2px dashed grey; border-radius: 4px; text-align: center; cursor: pointer; background-color: #eddff4;">
+        
+        <div *ngIf="!imagePreview && !isSubmitting" class="py-4 sansation-regular">
+          <p class="mt-2">Click to select a new image (optional)</p>
+        </div>
+        <div *ngIf="isSubmitting && !imagePreview" class="py-4 sansation-regular">
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading image...</span>
+            </div>
+            <p class="mt-2">Loading image...</p>
+        </div>
+        
+        <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview" style="max-height: 300px; max-width: 100%;">
+      </div>
+      
+      <input 
+        #fileInput
+        type="file" 
+        accept="image/*" 
+        style="display: none;"
+        (change)="onFileSelected($event)">
+    </div>
+    
+    <div class="mb-3">
+      <label for="title" class="form-label sansation-regular">Title*</label>
+      <input 
+        type="text" 
+        class="form-control"
+        style="background-color: #eddff4; border: 1px solid grey;" 
+        id="title" 
+        formControlName="title"
+        [class.is-invalid]="itemForm.get('title')?.invalid && itemForm.get('title')?.touched">
+      <div *ngIf="itemForm.get('title')?.invalid && itemForm.get('title')?.touched" class="invalid-feedback">
+        <div *ngIf="itemForm.get('title')?.errors?.['required']">Please provide a title.</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="body" class="form-label sansation-regular">Description*</label>
+      <textarea 
+        class="form-control"
+        style="background-color: #eddff4; border: 1px solid gray;"
+        id="body" 
+        rows="3" 
+        formControlName="body"
+        [class.is-invalid]="itemForm.get('body')?.invalid && itemForm.get('body')?.touched"></textarea>
+      <div class="invalid-feedback">
+        Please provide a description.
+      </div>
+    </div>
+
+    <!--Price-->
+    <div class="mb-3">
+        <label for="price" class="form-label sansation-regular">Price*</label>
+        <input
+        type="text"
+        class="form-control"
+        style="background-color: #eddff4; border: 1px solid grey;"
+        id="price"
+        formControlName="price"
+        [class.is-invalid]="itemForm.get('price')?.invalid && itemForm.get('price')?.touched">
+        <div class="invalid-feedback">
+            Please provide a price
+        </div>
+    </div>
+    
+    <!--Item type-->
+    <div class="mb-3">
+        <label for="type" class="form-label sansation-regular">Item type*</label>
+        <select
+          class="form-select"
+          style="background-color:#eddff4; border: 1px solid gray;"
+          id="type"
+          formControlName="type"
+          [class.is-invalid]="itemForm.get('type')?.invalid && itemForm.get('type')?.touched">
+          <option value="" disabled>Select item type</option>
+          <option value="Brush">Brush</option>
+          <option value="Model">Model</option>
+          <option value="Print">Print</option>
+          <option value="Figure">Figure</option>
+          <option value="Templates">Templates</option>
+        </select>
+        <div *ngIf="itemForm.get('type')?.errors?.['required'] && itemForm.get('type')?.touched" class="invalid-feedback">
+          Please select an item type.
+        </div>
+    </div>
+    <!--In Stock-->
+    <div class="mb-3 form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="inStock"
+          formControlName="inStock">
+        <label class="form-check-label sansation-regular" for="inStock">In Stock</label>
+    </div>
+    
+    <div *ngIf="uploadError" class="alert alert-danger mb-3">
+      {{ uploadError }}
+    </div>
+    
+    <button 
+      type="submit"
+      class="btn btn-primary p-3 sansation-regular upload-button" 
+      [disabled]="isSubmitting || itemForm.invalid">
+      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+      {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+    </button>
+  </form>
+        </div>
+    </div> 
+</div> 
