@@ -167,4 +167,21 @@ export class ApiService {
       })
     );
   }
+  
+  //Filter api calls
+  getContentByCategory(category: string): Observable<ContentShortViewDto[]> {
+    return this.http.get<ContentShortViewDto[]>(`${this.backendUrl}/api/Filter/filterContentByCategory?category=${category}`)
+  }
+
+  getHighestApprovedContents(): Observable<ContentShortViewDto[]>{
+    return this.http.get<ContentShortViewDto[]>(`${this.backendUrl}/api/Filter/highestapprovedContents`)
+  }
+
+  getContentHighestRatedContentOfUser(username: string): Observable<ContentShortViewDto>{
+    return this.http.get<ContentShortViewDto>(`${this.backendUrl}/api/Filter/getContentHighestRatedContentOfUser?username=${username}`)
+  }
+
+  getHighestApprovedCreator(): Observable<{ [key: string]: ContentShortViewDto }> {
+  return this.http.get<{ [key: string]: ContentShortViewDto }>(`${this.backendUrl}/api/Filter/getHighestApprovedCreator`);
+}
 }

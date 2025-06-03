@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales-upload',
@@ -21,23 +21,25 @@ export class SalesUploadComponent implements OnInit {
   uploadError: string | null = null;
   selectedFile: File | null = null;
   isSubmitting = false;
-  
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
     private router: Router,
-  ) {}
-  
+  ) { }
+
   ngOnInit(): void {
     this.salesItemForm = this.fb.group({
       title: ['', Validators.required],
       body: ['', Validators.required],
-      price: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
       type: ['', Validators.required],
-      inStock: [true , Validators.required]
+      inStock: [true, Validators.required],
+      number: [1, [Validators.required, Validators.min(1)]],
+      ownerId: ['2811c75d-ae64-44f4-90f7-32aa02bd2202'] 
     });
   }
-  
+
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -45,10 +47,10 @@ export class SalesUploadComponent implements OnInit {
         this.uploadError = 'Please select a valid image file (JPEG, PNG, GIF, or WebP).';
         return;
       }
-      
+
       this.selectedFile = file;
       this.uploadError = null;
-      
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -56,29 +58,37 @@ export class SalesUploadComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-  
+
   onSubmit(): void {
     if (this.salesItemForm.invalid || !this.selectedFile) {
       Object.keys(this.salesItemForm.controls).forEach(key => {
         this.salesItemForm.get(key)?.markAsTouched();
       });
-      
+
       if (!this.selectedFile) {
         this.uploadError = 'Please select an image file.';
       }
       return;
     }
-    
+
     this.isSubmitting = true;
     this.uploadError = null;
-    
+
     const formData = new FormData();
     formData.append('uploadedFile', this.selectedFile);
-    
+
+    formData.append('title', this.salesItemForm.get('title')?.value || '');
+    formData.append('body', this.salesItemForm.get('body')?.value || '');
+    formData.append('type', this.salesItemForm.get('type')?.value || '');
+    formData.append('price', this.salesItemForm.get('price')?.value?.toString() || '0');
+    formData.append('inStock', this.salesItemForm.get('inStock')?.value?.toString() || 'true');
+    formData.append('number', this.salesItemForm.get('number')?.value?.toString() || '1');
+    formData.append('ownerId', this.salesItemForm.get('ownerId')?.value?.toString() || '2811c75d-ae64-44f4-90f7-32aa02bd2202');
+
     Object.keys(this.salesItemForm.value).forEach(key => {
       formData.append(key, this.salesItemForm.get(key)?.value);
     });
-    
+
     this.apiService.addSalesItem(formData).subscribe({
       next: () => {
         console.log('Sales Item added succesfully');
@@ -92,10 +102,10 @@ export class SalesUploadComponent implements OnInit {
       }
     });
   }
-  
+
   resetForm(): void {
     this.salesItemForm.reset({
-      ownerId: 'user123'
+      ownerId: '2811c75d-ae64-44f4-90f7-32aa02bd2202'
     });
     this.imagePreview = null;
     this.selectedFile = null;

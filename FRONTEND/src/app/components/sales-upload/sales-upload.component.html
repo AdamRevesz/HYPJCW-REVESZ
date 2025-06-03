@@ -3,7 +3,7 @@
 <div class="container-fluid d-flex justify-content-center mt-5 align-items-center min-vh-100">
     <div class="card shadow-sm" style="width: 70rem; border-radius: 15px; border: 1px solid #dadce0">
         <div class="card-body p-4">
-  <h2 class="text-center p-2 sansation-regular" style="font-weight: bold; font-size: 35px; color: #5c2ca8;">Upload New Picture</h2>
+  <h2 class="text-center p-2 sansation-regular" style="font-weight: bold; font-size: 35px; color: #5c2ca8;">Upload New Sales Item</h2>
   
   <form [formGroup]="salesItemForm" (ngSubmit)="onSubmit()">
 
@@ -88,6 +88,21 @@
         </select>
         <div *ngIf="salesItemForm.get('type')?.errors?.['required'] && salesItemForm.get('type')?.touched" class="invalid-feedback">
           Please select an item type.
+        </div>
+    </div>
+    <!--Number of items-->
+    <div class="mb-3">
+        <label for="number" class="form-label sansation-regular">Quantity*</label>
+        <input
+        type="number"
+        class="form-control"
+        style="background-color: #eddff4; border: 1px solid grey;"
+        id="number"
+        formControlName="number"
+        min="1"
+        [class.is-invalid]="salesItemForm.get('number')?.invalid && salesItemForm.get('number')?.touched">
+        <div class="invalid-feedback">
+            Please provide a valid quantity (minimum 1).
         </div>
     </div>
 
