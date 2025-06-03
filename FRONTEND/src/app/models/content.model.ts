@@ -125,3 +125,14 @@ export interface UserCreateUpdateDto {
   email: string;
   isProfessional: boolean;
 }
+
+//Graph helpers
+export interface UserContentCountDto{
+  username: string;
+  contentCount: number;
+}
+
+export interface ContentCategoryCountDto {
+  category: string;
+  count: number;
+}

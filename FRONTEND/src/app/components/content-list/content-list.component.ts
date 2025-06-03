@@ -114,6 +114,7 @@ export class ContentListComponent implements OnInit {
 
   getHighestApprovedContents(){
     this.contents = [];
+    this.creatorDict = {};
     this.apiService.getHighestApprovedContents().subscribe({
       next: (data) => {
         this.contents = data;

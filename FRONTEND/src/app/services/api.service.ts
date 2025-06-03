@@ -13,7 +13,9 @@ import {
   PictureCreateDto,
   CommentCreateDto,
   ContentViewDto,
-  UserViewDto
+  UserViewDto,
+  UserContentCountDto,
+  ContentCategoryCountDto
 } from '../models/content.model'
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { Form } from '@angular/forms';
@@ -183,5 +185,13 @@ export class ApiService {
 
   getHighestApprovedCreator(): Observable<{ [key: string]: ContentShortViewDto }> {
   return this.http.get<{ [key: string]: ContentShortViewDto }>(`${this.backendUrl}/api/Filter/getHighestApprovedCreator`);
-}
+  }
+
+  getUserContentCount(): Observable<UserContentCountDto[]>{
+    return this.http.get<UserContentCountDto[]>(`${this.backendUrl}/api/Filter/UserContentCount`)
+  }
+
+  getContentCategoryCount(): Observable<ContentCategoryCountDto[]>{
+    return this.http.get<ContentCategoryCountDto[]>(`${this.backendUrl}/api/Filter/getContentCategoryCount`)
+  }
 }
