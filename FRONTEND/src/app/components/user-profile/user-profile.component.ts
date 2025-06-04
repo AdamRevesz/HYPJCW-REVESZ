@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
   selectedFile: File | null = null;
   imagePreview: string | null = null;
   isSubmiting = false;
-  userId = '2811c75d-ae64-44f4-90f7-32aa02bd2202';
+  userId = 'adda4670-e23d-43b0-a6f5-de4ff095fd53';
   user: UserViewDto | null = null;
   userLoadError: string | null = null;
 
