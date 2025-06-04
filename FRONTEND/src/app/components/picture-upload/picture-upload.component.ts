@@ -31,7 +31,7 @@ export class PictureUploadComponent implements OnInit {
       title: ['', Validators.required],
       body: ['', Validators.required],
       category: ['', Validators.required],
-      ownerId: ['2811c75d-ae64-44f4-90f7-32aa02bd2202'] 
+      ownerId: ['adda4670-e23d-43b0-a6f5-de4ff095fd53'] 
     });
   }
   

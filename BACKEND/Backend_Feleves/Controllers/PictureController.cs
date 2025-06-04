@@ -23,7 +23,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         {
             if (uploadedFile != null && uploadedFile.Length > 0)
             {
-                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                string folderPath = Path.Combine("..", "..", "FRONTEND", "src", "assets", "UploadedPictures");
                 Directory.CreateDirectory(folderPath);
 
                 var fileName = Path.GetFileName(uploadedFile.FileName);
@@ -82,7 +82,7 @@ namespace Backend_Feleves.Endpoint.Controllers
         {
             if (uploadedFile != null && uploadedFile.Length > 0)
             {
-                string folderPath = Path.Combine("..", "..", "FrontEnd_Feleves", "src", "assets", "UploadedPictures");
+                string folderPath = Path.Combine("..", "FRONTEND", "src", "assets", "UploadedPictures");
                 Directory.CreateDirectory(folderPath);
 
                 var fileName = Path.GetFileName(uploadedFile.FileName);

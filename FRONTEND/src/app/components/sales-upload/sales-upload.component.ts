@@ -36,7 +36,7 @@ export class SalesUploadComponent implements OnInit {
       type: ['', Validators.required],
       inStock: [true, Validators.required],
       number: [1, [Validators.required, Validators.min(1)]],
-      ownerId: ['2811c75d-ae64-44f4-90f7-32aa02bd2202'] 
+      ownerId: ['adda4670-e23d-43b0-a6f5-de4ff095fd53'] 
     });
   }
 
